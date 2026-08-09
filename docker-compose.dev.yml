@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      
+    image: '${PROJECT_NAME}_frontend:${PROJECT_VERSION:-latest}-dev'
+    container_name: '${PROJECT_NAME}_frontend_dev'
+    ports:
+      - '${FRONTEND_PORT:-5173}:5173'
+    
+    env_file:
+      - .env.development
+    
+    command: npm run dev
+    restart: 'no'
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ../../packages/shared:/app/external_shared

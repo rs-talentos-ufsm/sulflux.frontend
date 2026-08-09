@@ -1,0 +1,266 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.statsGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  margin: 0;
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.cardIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statValueMono {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: monospace;
+  margin: 0;
+}
+
+.progressBar {
+  margin-top: 0.5rem;
+  height: 0.5rem;
+}
+
+.statSubtitle {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0;
+}
+
+.timerCardActive {
+  border-color: color-mix(in srgb, #10b981 50%, transparent) !important;
+}
+
+.timerTaskName {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  margin: 0;
+}
+
+.timerButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+}
+
+.timerIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.tableCardTitle {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.tableCardContent {
+  padding: 0;
+}
+
+.tableHeadHidden {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .tableHeadHidden {
+    display: table-cell;
+  }
+}
+
+.textRight {
+  text-align: right;
+}
+
+.taskCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatarContainer {
+  display: none;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .avatarContainer {
+    display: flex;
+  }
+}
+
+.avatarFallback {
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  font-size: 10px;
+}
+
+.taskName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.projectBadge {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.badgeNoBorder {
+  border: none !important;
+  font-size: 0.75rem;
+}
+
+.dateCell {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 768px) {
+  .dateCell {
+    display: table-cell;
+  }
+}
+
+.hoursCell {
+  text-align: right;
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+.natureDev {
+  background-color: color-mix(in srgb, #3b82f6 10%, transparent) !important;
+  color: #2563eb !important;
+}
+
+.natureReview {
+  background-color: color-mix(in srgb, #8b5cf6 10%, transparent) !important;
+  color: #7c3aed !important;
+}
+
+.natureMeeting {
+  background-color: color-mix(in srgb, #f59e0b 10%, transparent) !important;
+  color: #d97706 !important;
+}
+
+.natureDesign {
+  background-color: color-mix(in srgb, #ec4899 10%, transparent) !important;
+  color: #db2777 !important;
+}
+
+.natureBug {
+  background-color: color-mix(in srgb, #ef4444 10%, transparent) !important;
+  color: #dc2626 !important;
+}
+
+.natureDoc {
+  background-color: color-mix(in srgb, #10b981 10%, transparent) !important;
+  color: #059669 !important;
+}
+
+.textCenter {
+  text-align: center;
+  color: var(--muted-foreground);
+  padding: 2rem 0;
+}
+
+.actionBtn {
+  width: 2rem;
+  height: 2rem;
+  color: var(--muted-foreground);
+  transition: color 0.2s;
+}
+
+.actionBtn:hover {
+  color: var(--foreground);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 12rem;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  color: var(--muted-foreground);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.natureDefault {
+  background-color: color-mix(
+    in srgb,
+    var(--muted) 50%,
+    transparent
+  ) !important;
+  color: var(--muted-foreground) !important;
+}

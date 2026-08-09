@@ -1,0 +1,151 @@
+.content {
+  width: 400px !important;
+  background-color: white;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .content {
+    width: 540px !important;
+  }
+}
+
+.form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fieldWrapper,
+.flexCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fixedTaskField {
+  display: flex;
+  height: 2.5rem;
+  align-items: center;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.inputTime,
+.inputField {
+  border-color: var(--border);
+  font-family: monospace;
+}
+
+.inputTime:focus-visible,
+.inputField:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: none;
+  border-color: var(--border);
+}
+
+.footer {
+  padding-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.submitButton {
+  background-color: #2563eb;
+  color: white;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.triggerIcon,
+.iconLeft {
+  margin-right: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+.comboboxButton,
+.comboboxTrigger {
+  width: 100%;
+  justify-content: space-between;
+  border-color: var(--border);
+  font-weight: 400;
+}
+
+.dateTrigger {
+  width: 100%;
+  justify-content: flex-start;
+  border-color: var(--border);
+  font-weight: 400;
+}
+
+.placeholder,
+.textMuted {
+  color: var(--muted-foreground);
+}
+
+.iconRight {
+  margin-left: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.checkIcon {
+  margin-right: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+}
+
+.opacity100 {
+  opacity: 1;
+}
+
+.opacity0 {
+  opacity: 0;
+}
+
+.popoverContent {
+  width: 400px;
+  padding: 0;
+}
+
+.calendarContent {
+  width: auto;
+  padding: 0;
+}
+
+.alertPending {
+  background-color: rgba(234, 88, 12, 0.1);
+  color: #ea580c;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}

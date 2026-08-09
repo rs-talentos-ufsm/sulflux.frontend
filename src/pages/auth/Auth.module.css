@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.brandSection {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  background-color: #3f3ff3;
+}
+
+.formSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+@media (min-width: 1024px) {
+  .brandSection {
+    display: flex;
+    width: 50%;
+  }
+  .formSection {
+    width: 50%;
+  }
+}
+
+.brandContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3rem;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.logoIcon {
+  width: 5rem;
+  height: 5rem;
+  border: 2px solid #ffffff;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.heroText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.heroText h2 {
+  font-size: 2.25rem;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.heroText p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.privacyLink {
+  cursor: pointer;
+}
+.privacyLink:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.mobileLogo {
+  display: block;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .mobileLogo {
+    display: none;
+  }
+}
+
+.logoIconMobile {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.75rem auto;
+  background-color: #3f3ff3;
+}
+
+.logoDotMobile {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.125rem;
+}

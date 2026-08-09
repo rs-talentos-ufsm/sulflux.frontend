@@ -1,0 +1,15 @@
+name: ${PROJECT_NAME}-frontend
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: '${PROJECT_NAME}_frontend_prod_image'
+    networks:
+      - project_network
+
+networks:
+  project_network:
+    name: '${PROJECT_NAME}_network'
+    external: true

@@ -1,0 +1,67 @@
+/* Base: inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 */
+.base {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-style: solid;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  /* transition-colors */
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 */
+.base:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--ring);
+}
+
+/* 
+  Variantes
+*/
+
+/* border-transparent bg-primary text-primary-foreground hover:bg-primary/80 */
+.default {
+  border-color: transparent;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+.default:hover {
+  background-color: color-mix(in srgb, var(--primary) 80%, transparent);
+}
+
+/* border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 */
+.secondary {
+  border-color: transparent;
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+.secondary:hover {
+  background-color: color-mix(in srgb, var(--secondary) 80%, transparent);
+}
+
+/* border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80 */
+.destructive {
+  border-color: transparent;
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+.destructive:hover {
+  background-color: color-mix(in srgb, var(--destructive) 80%, transparent);
+}
+
+/* outline: text-foreground (Borda herda a cor padrão do elemento no CSS, geralmente var(--border)) */
+.outline {
+  background-color: transparent;
+  border-color: var(--border);
+  color: var(--foreground);
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fundo suave arredondado -->
+  <rect width="512" height="512" rx="120" fill="#F3F4F6"/>
+  
+  <!-- Painel lateral esquerdo (Menu) -->
+  <rect x="80" y="80" width="112" height="352" rx="32" fill="#2563EB"/>
+  
+  <!-- Painel superior direito (Header/Resumo) -->
+  <rect x="224" y="80" width="208" height="112" rx="32" fill="#3B82F6"/>
+  
+  <!-- Painel principal direito (Gráficos) -->
+  <rect x="224" y="224" width="208" height="208" rx="32" fill="#FFFFFF"/>
+  
+  <!-- Barras do gráfico de dados -->
+  <rect x="256" y="320" width="36" height="72" rx="12" fill="#60A5FA"/>
+  <rect x="310" y="264" width="36" height="128" rx="12" fill="#2563EB"/>
+  <rect x="364" y="352" width="36" height="40" rx="12" fill="#93C5FD"/>
+</svg>

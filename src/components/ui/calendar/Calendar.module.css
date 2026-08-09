@@ -1,0 +1,216 @@
+.calendar {
+  padding: 0.75rem;
+}
+
+.months {
+  display: flex;
+  flex-direction: column;
+}
+
+.months > * + * {
+  margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+  .months {
+    flex-direction: row;
+  }
+  .months > * + * {
+    margin-top: 0;
+    margin-left: 1rem;
+  }
+}
+
+.month > * + * {
+  margin-top: 1rem;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-top: 0.25rem;
+}
+
+.captionLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav > * + * {
+  margin-left: 0.25rem;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  height: 1.75rem;
+  width: 1.75rem;
+  padding: 0;
+  opacity: 0.5;
+  transition:
+    opacity 0.2s,
+    background-color 0.2s,
+    color 0.2s;
+  cursor: pointer;
+}
+
+.navButton:hover {
+  opacity: 1;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.navButtonPrevious {
+  position: absolute;
+  left: 0.25rem;
+}
+
+.navButtonNext {
+  position: absolute;
+  right: 0.25rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table > * + * {
+  margin-top: 0.25rem;
+}
+
+.headRow {
+  display: flex;
+}
+
+.headCell {
+  color: var(--muted-foreground);
+  border-radius: 0.375rem;
+  width: 2.25rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.cell {
+  position: relative;
+  height: 2.25rem;
+  width: 2.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  padding: 0;
+}
+
+.cell:focus-within {
+  position: relative;
+  z-index: 20;
+}
+
+.cell:has([aria-selected]) {
+  background-color: var(--accent);
+}
+
+.cell:has([aria-selected].day-outside) {
+  background-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.cell:has([aria-selected].day-range-end) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.cell:first-child:has([aria-selected]) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.cell:last-child:has([aria-selected]) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  height: 2.25rem;
+  width: 2.25rem;
+  padding: 0;
+  font-weight: 400;
+  cursor: pointer;
+  border: none;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.day:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.day[aria-selected] {
+  opacity: 1;
+}
+
+.daySelected {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.daySelected:hover,
+.daySelected:focus {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.dayToday {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.dayOutside {
+  color: var(--muted-foreground);
+}
+
+.dayOutside[aria-selected] {
+  background-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  color: var(--muted-foreground);
+}
+
+.dayDisabled {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+.dayRangeMiddle[aria-selected] {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.dayHidden {
+  visibility: hidden;
+}
+
+.icon {
+  height: 1rem;
+  width: 1rem;
+}

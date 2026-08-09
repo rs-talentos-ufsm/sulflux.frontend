@@ -1,0 +1,116 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb; /* Fundo cinza bem claro */
+  padding: 2rem;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.content {
+  text-align: center;
+  max-width: 450px;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.iconWrapper {
+  width: 6rem;
+  height: 6rem;
+  background-color: #eef2ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  color: #3f3ff3; /* Sua cor primária */
+}
+
+.errorCode {
+  font-size: 6rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.description {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap; /* Garante que os botões quebrem a linha em telas muito pequenas */
+}
+
+.primaryButton,
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.primaryButton {
+  background-color: #3f3ff3;
+  color: white;
+}
+
+.primaryButton:hover {
+  background-color: #3333d1; /* Um tom ligeiramente mais escuro para o hover */
+}
+
+.primaryButton:active {
+  transform: translateY(1px);
+}
+
+.secondaryButton {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.secondaryButton:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.secondaryButton:active {
+  transform: translateY(1px);
+}
+
+/* Animação suave na entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

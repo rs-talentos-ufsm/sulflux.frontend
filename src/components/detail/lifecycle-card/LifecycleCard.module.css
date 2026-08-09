@@ -1,0 +1,317 @@
+.cardHeader {
+  padding-bottom: 0.75rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stepperList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stepperItem {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.stepIconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stepDot {
+  display: flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  font-size: 10px;
+}
+
+.stepDotDone {
+  border-color: #10b981;
+  background-color: #10b981;
+  color: white;
+}
+
+.stepDotActive {
+  border-color: #3b82f6;
+  background-color: #3b82f6;
+  color: white;
+}
+
+.stepDotPending {
+  border-color: var(--border);
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.stepIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.stepLine {
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+  width: 1px;
+  flex: 1 1 0%;
+}
+
+.stepLineDone {
+  background-color: #10b981;
+}
+
+.stepLinePending {
+  background-color: var(--border);
+}
+
+.stepTextContainer {
+  padding-bottom: 1rem;
+}
+
+.stepTextActive {
+  opacity: 1;
+}
+
+.stepTextPending {
+  opacity: 0.7;
+}
+
+.stepLabel {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.stepLabelActive {
+  font-weight: 600;
+}
+
+.stepLabelPending {
+  font-weight: 500;
+}
+
+.stepCurrentHint {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.finishedAlert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  background-color: rgba(16, 185, 129, 0.1);
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: #047857;
+}
+
+.finishedIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.actionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.advanceButton {
+  justify-content: space-between;
+  background-color: color-mix(in srgb, #10b981 12%, transparent);
+  color: #059669;
+  border-color: color-mix(in srgb, #10b981 30%, transparent);
+}
+
+.advanceButton:hover {
+  background-color: color-mix(in srgb, #10b981 20%, transparent);
+}
+
+.advanceIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.finishButton {
+  background-color: #059669;
+  color: white;
+}
+
+.finishButton:hover {
+  background-color: #047857;
+}
+
+.finishButtonIcon {
+  margin-right: 0.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .dialogContent {
+    max-width: 28rem;
+  }
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.transitionSummary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--muted) 50%);
+  padding: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.summaryStage {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.summaryDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+
+.summaryDotFallback {
+  background-color: var(--muted);
+}
+
+.summaryArrow {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+}
+
+.summaryStageTarget {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 500;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.selectItemWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.avatarFallback {
+  background-color: color-mix(in srgb, var(--primary) 10%);
+  color: var(--primary);
+  font-size: 9px;
+}
+
+.assigneeHint {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.assigneeHintIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.actionsWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.timerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.timerBtnPlay {
+  background-color: color-mix(in srgb, #3b82f6 15%, transparent);
+  color: #2563eb;
+}
+.timerBtnPlay:hover {
+  background-color: color-mix(in srgb, #3b82f6 25%, transparent);
+}
+
+.timerBtnPause {
+  background-color: color-mix(in srgb, #f59e0b 15%, transparent);
+  color: #d97706;
+}
+.timerBtnPause:hover {
+  background-color: color-mix(in srgb, #f59e0b 25%, transparent);
+}
+
+.timerBtnStop {
+  background-color: color-mix(in srgb, #ef4444 15%, transparent);
+  color: #dc2626;
+}
+.timerBtnStop:hover {
+  background-color: color-mix(in srgb, #ef4444 25%, transparent);
+}
+
+.btnAdvance {
+  background-color: color-mix(in srgb, #44ef5b 25%, transparent);
+  color: #10b981;
+}
+
+.btnAdvance:hover {
+  background-color: color-mix(in srgb, #44ef5b 35%, transparent);
+}
+
+.timerIcon {
+  width: 1rem;
+  height: 1rem;
+}

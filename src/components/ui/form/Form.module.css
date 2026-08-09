@@ -1,0 +1,18 @@
+.item > * + * {
+  margin-top: 0.5rem;
+}
+
+.labelError {
+  color: var(--destructive);
+}
+
+.description {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.message {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--destructive);
+}

@@ -1,0 +1,23 @@
+.layoutWrapper {
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  flex: 1 1 0%;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    padding: 1.5rem;
+  }
+}

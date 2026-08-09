@@ -1,0 +1,194 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.gridThemes {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .gridThemes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.themeButton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  padding: 1rem;
+  text-align: left;
+  transition: all 0.15s ease-in-out;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.themeButton:hover {
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+.themeButtonInactive {
+  border-color: var(--border);
+}
+
+.themeButtonActive {
+  border-color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+}
+
+.checkBadge {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  display: flex;
+  height: 1.25rem;
+  width: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.checkIcon {
+  height: 0.75rem;
+  width: 0.75rem;
+}
+
+.previewBox {
+  width: 100%;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.previewTextBar {
+  height: 0.5rem;
+  width: 3rem;
+  border-radius: 0.25rem;
+}
+
+.previewInnerCard {
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.previewMutedBarLong {
+  height: 0.375rem;
+  width: 4rem;
+  border-radius: 0.25rem;
+}
+
+.previewMutedBarMedium {
+  height: 0.375rem;
+  width: 3.5rem;
+  border-radius: 0.25rem;
+}
+
+.previewMutedBarShort {
+  height: 0.375rem;
+  width: 2.5rem;
+  border-radius: 0.25rem;
+}
+
+.previewMutedBarTiny {
+  height: 0.375rem;
+  width: 2rem;
+  border-radius: 0.25rem;
+}
+
+.bgLight {
+  background-color: 210, 40%, 98%;
+}
+.cardLight {
+  background-color: white;
+}
+.textLight {
+  background-color: 222, 47%, 11%;
+}
+.mutedLight {
+  background-color: 214, 32%, 91%;
+}
+
+.bgDark {
+  background-color: 222, 47%, 6%;
+}
+.cardDark {
+  background-color: 222, 47%, 9%;
+}
+.textDark {
+  background-color: 210, 40%, 98%;
+}
+.mutedDark {
+  background-color: 222, 47%, 16%;
+}
+
+.bgSystem {
+  background: linear-gradient(to right, 210, 40%, 98%), 222, 47%, 6%;
+}
+.cardSystem {
+  background: linear-gradient(to right, white, 222, 47%, 9%);
+}
+.textSystem {
+  background-color: 215, 16%, 47%;
+}
+.mutedSystem {
+  background: linear-gradient(to right, 214, 32%, 91%), 222, 47%, 16%;
+}
+
+.labelHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.labelIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.labelText {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.labelDesc {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.settingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.gridSettings {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .gridSettings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

@@ -1,0 +1,112 @@
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.gridContainer {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.avatarSection {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.relativeWrapper {
+  position: relative;
+}
+
+.avatarLarge {
+  height: 5rem;
+  width: 5rem;
+}
+
+.avatarFallbackLarge {
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.cameraButton {
+  position: absolute;
+  bottom: -0.25rem;
+  right: -0.25rem;
+  display: flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.cameraButton:hover {
+  transform: scale(1.05);
+}
+
+.cameraIcon {
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+.avatarTextSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nameText {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.mutedText {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.xsMutedText {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.textareaNoResize {
+  resize: none;
+}
+
+.footerAction {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.saveIcon {
+  margin-right: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+}

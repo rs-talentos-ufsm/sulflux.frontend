@@ -1,0 +1,549 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badgesContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.projectId {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.badge {
+  border: 0;
+  font-size: 0.75rem;
+}
+
+.projectTitle {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.metricsGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .metricsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.metricCardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+}
+
+.metricCardTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.metricCardIcon {
+  width: 1rem;
+  height: 1rem;
+  color: #64748b;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.metricSubtitle {
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.progressEmerald {
+  margin-top: 0.5rem;
+  height: 0.375rem;
+}
+
+.progressEmerald > div,
+.progressEmeraldHeader > div {
+  background-color: #10b981 !important;
+}
+
+.progressEmeraldHeader {
+  height: 0.5rem;
+}
+
+.btnSmallIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.calendarContent {
+  width: auto;
+  padding: 0;
+}
+
+.layoutGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .layoutGrid {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.descEditContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.descTextarea {
+  min-height: 140px;
+  resize: none;
+}
+
+.descActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.descText {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.625;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.progressText {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.taskItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+}
+
+.taskItem:hover .taskDeleteBtn {
+  opacity: 1;
+}
+
+.taskLabel {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.taskLabelDone {
+  text-decoration: line-through;
+  color: #64748b;
+}
+
+.taskDeleteBtn {
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.taskAddContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.taskInput {
+  height: 2.25rem;
+}
+
+.peopleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+  margin-top: 0;
+}
+
+.personName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.personEmail {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.membersHeader {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addMemberBtn {
+  height: 1.75rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.membersList {
+  display: flex;
+  margin-left: 0.5rem;
+}
+
+.membersList > * {
+  margin-left: -0.5rem;
+}
+
+.avatarLg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.avatarSm {
+  margin-right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.avatarActivity {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.avatarFallbackLg {
+  background-color: color-mix(in srgb, #2563eb 10%, transparent);
+  color: #2563eb;
+  font-size: 0.75rem;
+}
+
+.avatarFallbackSm {
+  background-color: color-mix(in srgb, #2563eb 10%, transparent);
+  color: #2563eb;
+  font-size: 9px;
+}
+
+.avatarBordered {
+  border: 2px solid #ffffff;
+}
+
+.timeTotal {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.timeSubtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  margin-top: 0;
+}
+
+.timeList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.timeItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.timeDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+
+.timeValue {
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.tabsHeader {
+  padding-bottom: 0;
+}
+
+.tabsList {
+  width: 100%;
+}
+
+.tabsTrigger {
+  flex: 1;
+}
+
+.tabsContent {
+  padding-top: 1rem;
+}
+
+.tabPanel {
+  margin-top: 0;
+}
+
+.scrollAreaActivity {
+  height: 16rem;
+}
+
+.scrollAreaChat {
+  height: 13rem;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activityItem {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.activityTimeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activityLine {
+  margin-top: 0.25rem;
+  width: 1px;
+  flex: 1;
+  background-color: #e2e8f0;
+}
+
+.activityContent {
+  padding-bottom: 1rem;
+}
+
+.activityUser {
+  font-weight: 500;
+}
+
+.activityTime {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.chatItem {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chatBubble {
+  border-radius: 0.5rem;
+  background-color: #f1f5f9;
+  padding: 0.625rem;
+  font-size: 0.875rem;
+}
+
+.chatUser {
+  font-weight: 500;
+  font-size: 0.75rem;
+  margin-bottom: 0.125rem;
+  margin-top: 0;
+}
+
+.chatMessage {
+  color: #64748b;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.chatTime {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+.chatInputContainer {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chatInput {
+  height: 2rem;
+  font-size: 0.75rem;
+}
+
+.loadingContainer {
+  display: flex;
+  height: 16rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  color: #64748b;
+  animation: spin 1s linear infinite;
+}
+
+.animateSpin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btnIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.iconSm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.iconXs {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.iconXsRight {
+  margin-right: 0.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.iconAddMember {
+  margin-right: 0.375rem;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.shrink0 {
+  flex-shrink: 0;
+}
+
+.textSm {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.textMuted {
+  color: #64748b;
+}
+
+.bgViolet {
+  background-color: #8b5cf6;
+}
+
+.bgAmber {
+  background-color: #f59e0b;
+}
+
+.bgBlue {
+  background-color: #3b82f6;
+}
+
+.bgEmerald {
+  background-color: #10b981;
+}
+
+.bgPink {
+  background-color: #ec4899;
+}
+
+.badgePlanning {
+  background-color: color-mix(in srgb, #8b5cf6 10%, transparent);
+  color: #7c3aed;
+}
+
+.badgeActive {
+  background-color: color-mix(in srgb, #f59e0b 10%, transparent);
+  color: #d97706;
+}
+
+.badgeReview {
+  background-color: color-mix(in srgb, #3b82f6 10%, transparent);
+  color: #2563eb;
+}
+
+.badgeCompleted {
+  background-color: color-mix(in srgb, #10b981 10%, transparent);
+  color: #059669;
+}

@@ -1,0 +1,142 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.header {
+  text-align: center;
+}
+.title {
+  font-size: 1.875rem;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+.subtitle {
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.875rem;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+}
+.input {
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  outline: none;
+  font-size: 0.875rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.input:focus {
+  border-color: #3f3ff3;
+}
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.eyeButton {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  padding: 0.25rem;
+}
+.primaryButton {
+  height: 3rem;
+  background-color: #3f3ff3;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.primaryButton:hover {
+  opacity: 0.9;
+}
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1rem 0;
+}
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e5e7eb;
+  z-index: 1;
+}
+.divider span {
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding: 0 0.5rem;
+  color: #6b7280;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+.socialGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.socialButton {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #111827;
+}
+.socialButton:hover {
+  background-color: #f9fafb;
+}
+.footerText {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
+.switchMode {
+  background: none;
+  border: none;
+  color: #3f3ff3;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+.switchMode:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.disabledButton {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}

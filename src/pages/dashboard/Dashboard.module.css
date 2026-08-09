@@ -1,0 +1,377 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Helpers de Cor */
+.textBlue {
+  color: #3b82f6;
+}
+.textGreen {
+  color: #10b981;
+}
+.textPurple {
+  color: #8b5cf6;
+}
+.textRed {
+  color: #ef4444;
+}
+.textOrange {
+  color: #f59e0b;
+}
+.textPink {
+  color: #ec4899;
+}
+
+.bgBlue {
+  background-color: #3b82f6;
+}
+.bgGreen {
+  background-color: #10b981;
+}
+.bgYellow {
+  background-color: #eab308;
+}
+.bgPurple {
+  background-color: #8b5cf6;
+}
+.bgGray {
+  background-color: #6b7280;
+}
+.bgPink {
+  background-color: #ec4899;
+}
+
+/* KPI Grid */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .kpiGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .kpiGrid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+.kpiContent {
+  padding: 0.75rem;
+}
+
+.kpiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpiIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.alertBadge {
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  font-size: 0.625rem;
+}
+
+.kpiBottom {
+  margin-top: 0.5rem;
+}
+
+.kpiValue {
+  font-family: monospace;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.kpiTitle {
+  font-size: 0.625rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .chartsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .chartsGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .colSpan2 {
+    grid-column: span 2 / span 2;
+  }
+}
+
+/* Horas por Natureza (Feito na Mão) */
+.natureContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stackedBar {
+  display: flex;
+  height: 0.5rem; /* Também afinei essa barra empilhada para combinar com os projetos */
+  width: 100%;
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: var(--muted);
+}
+
+.stackedSegment {
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+}
+
+.natureLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.natureItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.natureItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+}
+
+.legendDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+}
+
+.natureValue {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* SVG Radial Nativo */
+.radialContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 180px;
+}
+
+.radialWrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.radialSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-180deg);
+}
+
+.radialBackground {
+  stroke: var(--muted);
+}
+
+.radialProgress {
+  stroke: #3b82f6;
+  transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.radialTextWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.radialPercent {
+  font-family: monospace;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.radialLabel {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Projetos (Usando o Radix Progress do usuário) */
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.projectItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.projectItemHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.projectName {
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.projectValue {
+  font-family: monospace;
+  color: var(--foreground);
+}
+
+.projectProgress {
+  height: 0.25rem;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+/* Feed de Atividade */
+.feedContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.feedItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem;
+  border-radius: var(--radius);
+  background-color: hsl(var(--muted) / 0.3);
+  border-left: 4px solid #10b981;
+}
+
+.feedIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: #10b981;
+}
+
+.feedText {
+  flex: 1;
+  min-width: 0;
+}
+
+.feedText p {
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--muted-foreground);
+}
+
+.feedText strong {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.feedTime {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+/* Estados Utilitários */
+.loadingContainer,
+.errorContainer,
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+}
+
+.emptyState {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.errorContainer {
+  color: var(--destructive);
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  animation: spin 1s linear infinite;
+  color: var(--muted-foreground);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
