@@ -1,0 +1,218 @@
+.container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Cabeçalho */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.subtitle {
+  margin-top: 0.25rem;
+  max-width: 36rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Resumo (Cards) */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  max-width: 28rem;
+}
+
+.summaryCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  padding: 0.625rem 0.75rem;
+}
+
+.summaryIconBox {
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.iconPrimary {
+  color: var(--primary);
+}
+.bgPrimary {
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.iconWarning {
+  color: #d97706;
+}
+.bgWarning {
+  background-color: color-mix(in srgb, #d97706 10%, transparent);
+}
+
+.summaryContent {
+  line-height: 1.2;
+}
+
+.summaryValue {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.summaryLabel {
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* Filtros */
+.filtersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .filtersContainer {
+    flex-direction: row;
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+}
+
+.searchInput {
+  padding-left: 2.25rem !important;
+}
+
+.selectTrigger {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .selectTrigger {
+    width: 13rem;
+  }
+}
+
+/* Grid de Propriedades */
+.propertiesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .propertiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .propertiesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Card de Nova Propriedade */
+.newPropertyCard {
+  display: flex;
+  min-height: 21.25rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  border: 2px dashed var(--border);
+  background-color: color-mix(in srgb, var(--secondary) 40%, transparent);
+  padding: 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.newPropertyCard:hover {
+  border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+  background-color: var(--secondary);
+}
+
+.newPropertyIconBox {
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+}
+
+.newPropertyTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.newPropertyDesc {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Empty State & Loading */
+.emptyState,
+.loadingState {
+  margin-top: 2.5rem;
+  border-radius: 0.75rem;
+  border: 1px dashed var(--border);
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.emptyStateText {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
