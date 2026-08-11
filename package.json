@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
-    "@lib/shared": "git+https://github.com/dorneles-laboratory/pgi-proa.shared.git#main",
+    "@lib/shared": "git+https://github.com/rs-talentos-ufsm/sulflux.shared.git#main",
     "@radix-ui/react-avatar": "^1.2.2",
     "@radix-ui/react-checkbox": "^1.3.7",
     "@radix-ui/react-dialog": "^1.1.19",

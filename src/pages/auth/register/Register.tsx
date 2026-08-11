@@ -40,7 +40,7 @@ export default function RegisterPage({ onNavigateToLogin }: RegisterProps) {
   };
 
   if (status === AuthEnums.LoginStatus.Authenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Tipagem segura do erro do Axios para remover o @ts-ignore
@@ -64,7 +64,7 @@ export default function RegisterPage({ onNavigateToLogin }: RegisterProps) {
       <div className={styles.header}>
         <h2 className={styles.title}>Criar Conta</h2>
         <p className={styles.subtitle}>
-          Crie uma nova conta para começar no PGI-PROA.
+          Crie uma nova conta para começar no Sulflux.
         </p>
       </div>
 

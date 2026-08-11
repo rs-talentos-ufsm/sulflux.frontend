@@ -4,18 +4,11 @@ import {
   LayoutDashboard,
   Settings,
   ChevronDown,
-  ChevronsUpDown,
-  Plus,
   Sun,
   Moon,
   Monitor,
   Heart,
-  ListTodo,
-  FolderOpen,
-  // FileText,
-  Clock,
-  // User,
-  // RollerCoaster,
+  Leaf,
 } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme';
 import {
@@ -34,7 +27,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu/dropdown-menu';
@@ -52,33 +44,22 @@ interface NavItem {
 }
 
 const personalNav: NavItem[] = [
-  { title: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { title: 'Atividades', href: '/activities', icon: Clock },
-  { title: 'Tarefas', href: '/tasks', icon: ListTodo },
+  { title: 'Minhas Propriedades', href: '/', icon: LayoutDashboard },
   // { title: 'Documentos', href: '/documents', icon: FileText },
 ];
 
-interface SquadNavItem {
+interface AdminNavItem {
   title: string;
   href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
-const squadNav: SquadNavItem[] = [
-  { title: 'Projetos', href: '/squad/projects', icon: FolderOpen },
-  // { title: "Kanban Melhorias", href: "/squad/kanban", icon: Kanban },
-  // { title: "Incidentes", href: "/squad/incidentes", icon: AlertTriangle },
-  // { title: "Banco de Ideias", href: "/squad/ideias", icon: Lightbulb },
-  // { title: "Planejamento", href: "/squad/planejamento", icon: CalendarRange },
-  // { title: "Financeiro", href: "/squad/financeiro", icon: DollarSign },
-];
-
-const adminNav: SquadNavItem[] = [
+const adminNav: AdminNavItem[] = [
   // { title: "Usuários", href: "/users", icon: User },
   // { title: "Permissões", href: "/permissions", icon: RollerCoaster },
 ];
 
-const teams = [{ name: 'Engineering', color: '#10b981' }];
+// const teams = [];
 
 export default function AppSidebar() {
   const user = useAuthStore((state) => state.user);
@@ -108,27 +89,28 @@ export default function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg" className={styles.orgTrigger}>
                   <div className={styles.orgLogo}>
-                    <span>D</span>
+                    <Leaf className={styles.icon} />
                   </div>
                   <div className={styles.textWrapper}>
-                    <span className={styles.textTitle}>Dorneles</span>
+                    <span className={styles.textTitle}>Sulflux</span>
                     {/* <span className={styles.textSubtitle}>Design Team</span> */}
                   </div>
-                  <ChevronsUpDown className={styles.iconRight} />
+                  {/* <ChevronsUpDown className={styles.iconRight} /> */}
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className={styles.dropdownWidth}
-                align="start"
-                side="bottom"
-                sideOffset={4}
-              >
+              {/* {teams.length > 0 && (
+                <DropdownMenuContent
+                  className={styles.dropdownWidth}
+                  align="start"
+                  side="bottom"
+                  sideOffset={4}
+                >
                 <DropdownMenuLabel>Times</DropdownMenuLabel>
                 {teams.map((team) => (
                   <DropdownMenuItem key={team.name}>
                     <div
                       className={styles.teamColor}
-                      style={{ backgroundColor: team.color }}
+                      style={{ backgroundColor: team.color}}
                     />
                     {team.name}
                   </DropdownMenuItem>
@@ -139,6 +121,7 @@ export default function AppSidebar() {
                   Criar time
                 </DropdownMenuItem>
               </DropdownMenuContent>
+            )} */}
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -147,33 +130,10 @@ export default function AppSidebar() {
       <SidebarContent>
         {personalNav.length > 0 && (
           <SidebarGroup>
-            <SidebarGroupLabel>Pessoal</SidebarGroupLabel>
+            <SidebarGroupLabel>Monitoramento</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {personalNav.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.href}
-                    >
-                      <Link to={item.href}>
-                        <item.icon className={styles.iconBase} />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {squadNav.length > 0 && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Minha Squad</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {squadNav.map((item) => (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                       asChild

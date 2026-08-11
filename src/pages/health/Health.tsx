@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// Adicionei o ArrowLeft nos imports
 import {
   CheckCircle2,
   XCircle,
@@ -11,21 +10,16 @@ import {
 } from 'lucide-react';
 import styles from './Health.module.css';
 import api from '../../api/api';
-// Se usar react-router-dom, descomente a linha abaixo:
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function HealthPage() {
   const [backendStatus, setBackendStatus] = useState('loading');
   const [message, setMessage] = useState('Verificando serviços...');
 
-  // const navigate = useNavigate(); // Para react-router-dom
+  const navigate = useNavigate();
 
-  const handleBackToDashboard = () => {
-    // Exemplo com react-router-dom:
-    // navigate('/dashboard');
-
-    // Exemplo com window.location (Navegação nativa do navegador):
-    window.location.href = '/dashboard';
+  const handleBackToHome = () => {
+    navigate('/');
   };
 
   useEffect(() => {
@@ -113,7 +107,7 @@ export default function HealthPage() {
         </div>
 
         {/* NOVO: Botão de Voltar ao Dashboard */}
-        <button onClick={handleBackToDashboard} className={styles.backButton}>
+        <button onClick={handleBackToHome} className={styles.backButton}>
           <ArrowLeft size={18} />
           Voltar
         </button>

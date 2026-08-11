@@ -37,7 +37,7 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: '@pgi-proa:auth-state',
+      name: '@sulfluxcd:auth-state',
       storage: createJSONStorage(() => localStorage),
     },
   ),

@@ -16,16 +16,9 @@ import AppLayout from './components/layout/app-layout/AppLayout';
 import LoadingPage from './pages/loading/Loading';
 
 // pages
-import DashboardPage from './pages/dashboard/Dashboard';
 import SettingsPage from './pages/settings/Settings';
-import TasksPage from './pages/tasks/Tasks';
-import ProjectsPage from './pages/projects/Projects';
-import TaskDetailPage from './pages/tasks/task/Task';
-import ProjectDetailPage from './pages/projects/project/Project';
 import DocumentsPage from './pages/documents/Documents';
-import ActivitiesPage from './pages/activities/Activities';
-
-// import ProjectDetailPage from './pages/projects/[projectId]/Project';
+import PropertiesPage from './pages/properties/Properties';
 
 const AuthLoader = () => {
   const { data, status: queryStatus } = useUser();
@@ -42,10 +35,6 @@ const AuthLoader = () => {
       setStatus(AuthEnums.LoginStatus.Unauthenticated);
     }
   }, [queryStatus, data, setUser, setStatus]);
-
-  // if (queryStatus === 'pending') {
-  //   return <LoadingPage message="Autenticando sessão..." />;
-  // }
 
   return <Outlet />;
 };
@@ -77,27 +66,12 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               {/* Rotas pessoal */}
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/activities" element={<ActivitiesPage />} />
-              <Route path="/tasks" element={<TasksPage />} />
-              <Route path="/tasks/:taskId" element={<TaskDetailPage />} />
+              <Route path="/" element={<PropertiesPage />} />
               <Route path="/documents" element={<DocumentsPage />} />
-
-              {/* Rotas de squad */}
-              <Route path="/squad/projects" element={<ProjectsPage />} />
-              <Route
-                path="/squad/projects/:projectId"
-                element={<ProjectDetailPage />}
-              />
-
-              {/* Rotas de admin */}
 
               <Route path="/settings" element={<SettingsPage />} />
             </Route>
           </Route>
-
-          {/* Redirecionamento da raiz */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           {/* Rota 404 (Catch all) */}
           <Route path="*" element={<Navigate to="/not-found" replace />} />
