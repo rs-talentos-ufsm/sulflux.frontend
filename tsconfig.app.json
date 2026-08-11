@@ -19,8 +19,14 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@lib/shared": ["./external_shared/dist/index.d.ts"],
-      "@lib/shared/*": ["./external_shared/dist/*"],
+      "@lib/shared": [
+        "./external_shared/dist/index.d.ts",
+        "./node_modules/@lib/shared/dist/index.d.ts"
+      ],
+      "@lib/shared/*": [
+        "./external_shared/dist/*",
+        "./node_modules/@lib/shared/dist/*"
+      ],
       "zod": ["./node_modules/zod"]
     },
 
