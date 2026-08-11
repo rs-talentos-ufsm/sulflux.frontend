@@ -18,10 +18,10 @@ export default function AuthPage() {
               <img
                 className={styles.logoDotMobile}
                 src="/pgi.svg"
-                alt="PGI-PROA"
+                alt="Suflux"
               />
             </div>
-            <h1 className={styles.logoText}>PGI-PROA</h1>
+            <h1 className={styles.logoText}>Suflux</h1>
           </div>
 
           <div className={styles.heroText}>
@@ -30,7 +30,7 @@ export default function AuthPage() {
           </div>
 
           <div className={styles.footer}>
-            <span>Copyright ©2026 PGI-PROA.</span>
+            <span>Copyright ©2026 Suflux.</span>
             {/* <span className={styles.privacyLink}>Política de Privacidade</span> */}
           </div>
         </div>
@@ -45,10 +45,10 @@ export default function AuthPage() {
               <img
                 className={styles.logoDotMobile}
                 src="/pgi.svg"
-                alt="PGI-PROA"
+                alt="Suflux"
               />
             </div>
-            <h1>PGI-PROA</h1>
+            <h1>Suflux</h1>
           </div>
 
           {/* Renderização Condicional das Telas */}

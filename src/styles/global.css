@@ -1,42 +1,42 @@
 /* Variáveis CSS - Tema Claro */
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
+  --background: hsl(210, 40%, 98%);
+  --foreground: hsl(222, 47%, 11%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 47%, 11%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 47%, 11%);
 
-  --primary: #1d4ed8;
-  --primary-foreground: #ffffff;
+  --primary: hsl(142, 64%, 34%);
+  --primary-foreground: hsl(0, 0%, 100%);
 
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f8fafc;
-  --muted-foreground: #64748b;
-  --accent: #eff6ff;
-  --accent-foreground: #1d4ed8;
+  --secondary: hsl(140, 30%, 96%);
+  --secondary-foreground: hsl(150, 40%, 12%);
+  --muted: hsl(140, 30%, 96%);
+  --muted-foreground: hsl(150, 12%, 42%);
+  --accent: hsl(142, 45%, 93%);
+  --accent-foreground: hsl(150, 40%, 14%);
 
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #1d4ed8;
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(145, 20%, 88%);
+  --input: hsl(145, 20%, 88%);
+  --ring: hsl(142, 64%, 34%);
 
-  --chart-1: #3b82f6;
-  --chart-2: #10b981;
-  --chart-3: #f59e0b;
-  --chart-4: #8b5cf6;
-  --chart-5: #ec4899;
+  --chart-1: hsl(142, 64%, 34%);
+  --chart-2: hsl(160, 84%, 39%);
+  --chart-3: hsl(38, 92%, 50%);
+  --chart-4: hsl(217, 91%, 60%);
+  --chart-5: hsl(90, 60%, 45%);
 
-  --sidebar-background: #f8fafc;
-  --sidebar-foreground: #334155;
-  --sidebar-primary: #1d4ed8;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e2e8f0;
-  --sidebar-accent-foreground: #0f172a;
-  --sidebar-border: #cbd5e1;
-  --sidebar-ring: #1d4ed8;
+  --sidebar-background: hsl(150, 30%, 99%);
+  --sidebar-foreground: hsl(150, 40%, 14%);
+  --sidebar-primary: hsl(142, 64%, 34%);
+  --sidebar-primary-foreground: hsl(0, 0%, 100%);
+  --sidebar-accent: hsl(142, 45%, 93%);
+  --sidebar-accent-foreground: hsl(150, 40%, 14%);
+  --sidebar-border: hsl(145, 20%, 88%);
+  --sidebar-ring: hsl(142, 64%, 34%);
 
   /* Raios de borda */
   --radius: 0.5rem;
@@ -45,45 +45,45 @@
   --radius-sm: calc(var(--radius) - 4px);
 }
 
-/* Variáveis CSS - Tema Escuro (Extraído exato da sua imagem) */
+/* Variáveis CSS - Tema Escuro */
 .dark {
-  --background: #0b0f19; /* Fundo geral escuro azulado */
-  --foreground: #f8fafc;
-  --card: #111625; /* Cor dos cards da imagem */
-  --card-foreground: #f8fafc;
-  --popover: #111625;
-  --popover-foreground: #f8fafc;
+  --background: hsl(150, 30%, 6%);
+  --foreground: hsl(140, 20%, 96%);
+  --card: hsl(150, 28%, 9%);
+  --card-foreground: hsl(140, 20%, 96%);
+  --popover: hsl(150, 28%, 9%);
+  --popover-foreground: hsl(140, 20%, 96%);
 
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+  --primary: hsl(142, 60%, 45%);
+  --primary-foreground: hsl(150, 40%, 8%);
 
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #3b82f6;
+  --secondary: hsl(150, 25%, 14%);
+  --secondary-foreground: hsl(140, 20%, 96%);
+  --muted: hsl(150, 25%, 14%);
+  --muted-foreground: hsl(140, 12%, 62%);
+  --accent: hsl(150, 25%, 16%);
+  --accent-foreground: hsl(140, 20%, 96%);
 
-  --destructive: #7f1d1d;
-  --destructive-foreground: #ffffff;
-  --border: #1f293d; /* Borda sutil dos cards na imagem */
-  --input: #1f293d;
-  --ring: #3b82f6;
+  --destructive: hsl(0, 63%, 45%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(150, 25%, 16%);
+  --input: hsl(150, 25%, 16%);
+  --ring: hsl(142, 60%, 45%);
 
-  --chart-1: #3b82f6;
-  --chart-2: #10b981;
-  --chart-3: #f59e0b;
-  --chart-4: #8b5cf6;
-  --chart-5: #ec4899;
+  --chart-1: hsl(142, 60%, 45%);
+  --chart-2: hsl(160, 84%, 39%);
+  --chart-3: hsl(38, 92%, 50%);
+  --chart-4: hsl(217, 91%, 60%);
+  --chart-5: hsl(90, 60%, 50%);
 
-  --sidebar-background: #111625;
-  --sidebar-foreground: #94a3b8;
-  --sidebar-primary: #3b82f6;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #111625;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #1f293d;
-  --sidebar-ring: #3b82f6;
+  --sidebar-background: hsl(150, 30%, 8%);
+  --sidebar-foreground: hsl(140, 20%, 96%);
+  --sidebar-primary: hsl(142, 60%, 45%);
+  --sidebar-primary-foreground: hsl(150, 40%, 8%);
+  --sidebar-accent: hsl(150, 25%, 14%);
+  --sidebar-accent-foreground: hsl(140, 20%, 96%);
+  --sidebar-border: hsl(150, 25%, 16%);
+  --sidebar-ring: hsl(142, 60%, 45%);
 }
 
 /* Reset Global */
@@ -134,4 +134,26 @@ body {
 
 .animate-accordion-up {
   animation: accordion-up 0.2s ease-out;
+}
+
+/* react-grid-layout: integracao com o tema do projeto */
+.react-grid-item.react-grid-placeholder {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--primary) 50%, transparent);
+  border-radius: var(--radius);
+  opacity: 1;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  border-right-color: var(--muted-foreground);
+  border-bottom-color: var(--muted-foreground);
+}
+
+/* Padrao de pontos exibido no container do dashboard durante a edicao */
+.dashboard-edit-grid {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--muted-foreground) 18%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 18px 18px;
 }

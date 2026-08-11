@@ -26,7 +26,7 @@ export default function LoginPage({ onNavigateToRegister }: LoginProps) {
   };
 
   if (status === AuthEnums.LoginStatus.Authenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (

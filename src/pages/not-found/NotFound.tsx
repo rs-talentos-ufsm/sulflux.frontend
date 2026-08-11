@@ -6,7 +6,7 @@ export default function NotFoundPage() {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/dashboard');
+    navigate('/');
   };
 
   const handleGoBack = () => {
@@ -36,7 +36,7 @@ export default function NotFoundPage() {
 
           <button onClick={handleGoHome} className={styles.primaryButton}>
             <Home size={18} />
-            Ir para o Dashboard
+            Voltar para a Página Inicial
           </button>
         </div>
       </div>

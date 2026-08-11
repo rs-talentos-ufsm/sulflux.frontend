@@ -1,5 +1,4 @@
 import { useLocation, Link } from 'react-router-dom';
-// import { Bell, Search } from "lucide-react"
 import { SidebarTrigger } from '../../ui/sidebar/sidebar';
 import { Separator } from '../../ui/separator/separator';
 import {
@@ -25,16 +24,8 @@ import { useLogout } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
 
 const routeLabels: Record<string, string> = {
-  '/': 'Painel',
-  '/timeline': 'Linha do Tempo',
-  '/timeline/calendario': 'Calendario',
-  '/memoria': 'Memoria Academica',
-  '/competencias': 'Competencias',
-  '/toolkit': 'Academic Toolkit',
-  '/toolkit/linkedin-impact-builder': 'LinkedIn Impact Builder',
-  '/assistente': 'Assistente Academico',
-  '/configuracoes': 'Configuracoes',
-  '/notificacoes': 'Notificacoes',
+  '/': 'Minhas Propriedades',
+  '/settings': 'Notificacoes',
 };
 
 export default function AppHeader() {
@@ -42,12 +33,7 @@ export default function AppHeader() {
 
   const location = useLocation();
   const pathname = location.pathname;
-
-  const isTaskDetail =
-    pathname.startsWith('/tarefas/') && pathname !== '/tarefas';
-  const currentLabel = isTaskDetail
-    ? pathname.split('/').pop() || 'Detalhes'
-    : routeLabels[pathname] || 'Pagina';
+  const currentLabel = routeLabels[pathname] || 'Pagina';
 
   const { mutate: logout, isPending } = useLogout();
 
@@ -64,19 +50,10 @@ export default function AppHeader() {
       <Breadcrumb className={styles.breadcrumbWrapper}>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <span className={styles.mutedText}>Academic Companion</span>
+            <span className={styles.mutedText}>Sulflux</span>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          {isTaskDetail && (
-            <>
-              <BreadcrumbItem>
-                <Link to="/tarefas" className={styles.breadcrumbLinkText}>
-                  Tarefas
-                </Link>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-            </>
-          )}
+
           <BreadcrumbItem>
             <BreadcrumbPage>{currentLabel}</BreadcrumbPage>
           </BreadcrumbItem>

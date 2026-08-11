@@ -10,7 +10,7 @@ import { Toaster } from '../../ui/toaster/toaster';
 export default function AppLayout() {
   return (
     <div className={styles.layoutWrapper}>
-      <ThemeProvider defaultTheme="system" storageKey="pgi-proa-theme">
+      <ThemeProvider defaultTheme="system" storageKey="sulflux-theme">
         <SidebarProvider>
           <AppSidebar />
 
