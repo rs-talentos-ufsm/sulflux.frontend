@@ -20,19 +20,24 @@ import { PropertyCard } from '@/components/cards/property-card/property-card';
 import { useProperties } from '@/hooks/useProperty';
 import { PropertyStatus } from '@lib/shared';
 
+type StatusFilter =
+  | 'all'
+  | typeof PropertyStatus.Active
+  | typeof PropertyStatus.Configure;
+
 // Importação do CSS Modules
 import styles from './Properties.module.css';
 
 export default function PropertiesPage() {
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<string>('todas');
+  const [status, setStatus] = useState<StatusFilter>('all');
   const {
     data: paginatedProperties,
     isLoading,
     isError,
   } = useProperties({
     query: query || undefined,
-    status: status !== 'todas' ? status : undefined,
+    status: status !== 'all' ? status : undefined,
     page: 1,
     limit: 50,
   });
@@ -111,12 +116,15 @@ export default function PropertiesPage() {
             className={styles.searchInput}
           />
         </div>
-        <Select value={status} onValueChange={setStatus}>
+        <Select
+          value={status}
+          onValueChange={(value) => setStatus(value as StatusFilter)}
+        >
           <SelectTrigger className={styles.selectTrigger}>
             <SelectValue placeholder="Filtrar status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="todas">Todos os status</SelectItem>
+            <SelectItem value="all">Todos os status</SelectItem>
             <SelectItem value={PropertyStatus.Active}>Ativas</SelectItem>
             <SelectItem value={PropertyStatus.Configure}>
               A configurar
