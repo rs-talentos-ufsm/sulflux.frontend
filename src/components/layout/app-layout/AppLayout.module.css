@@ -13,11 +13,5 @@
 
 .mainContent {
   flex: 1 1 0%;
-  padding: 1rem;
-}
-
-@media (min-width: 768px) {
-  .mainContent {
-    padding: 1.5rem;
-  }
+  padding: 0.5rem;
 }

@@ -145,14 +145,14 @@ export function PropertyCard({ property }: { property: UIProperty }) {
                 asChild
                 className={`${styles.btnPrimaryFlex} ${styles.btnAmber}`}
               >
-                <Link to={`/propriedades/${property.id}`}>
+                <Link to={`/properties/${property.id}`}>
                   <Layers size={16} />
                   Configure Talhões
                 </Link>
               </Button>
             ) : (
               <Button asChild className={styles.btnPrimaryFlex}>
-                <Link to={`/propriedades/${property.id}`}>
+                <Link to={`/properties/${property.id}`}>
                   <Eye size={16} />
                   Ver Propriedade
                 </Link>
@@ -177,7 +177,7 @@ export function PropertyCard({ property }: { property: UIProperty }) {
 
           {!isConfigure && (
             <Button asChild variant="outline" className={styles.btnHistory}>
-              <Link to={`/propriedades/${property.id}/monitoramento`}>
+              <Link to={`/properties/${property.id}/monitoramento`}>
                 <History size={16} />
                 Histórico de Monitoramento
               </Link>
