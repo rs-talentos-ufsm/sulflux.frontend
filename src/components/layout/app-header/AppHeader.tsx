@@ -64,7 +64,7 @@ export default function AppHeader() {
           {/* Caso esteja na raiz, força a renderização de "Minhas Propriedades" */}
           {isRoot ? (
             <BreadcrumbItem>
-              <BreadcrumbPage>Minhas Propriedades</BreadcrumbPage>
+              <BreadcrumbPage>Boas Vindas</BreadcrumbPage>
             </BreadcrumbItem>
           ) : (
             // Itera sobre os fragmentos para construir o pão de migalhas

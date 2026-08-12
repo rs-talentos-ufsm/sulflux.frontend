@@ -9,6 +9,7 @@ import {
   Monitor,
   Heart,
   Leaf,
+  Star,
 } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme';
 import {
@@ -43,18 +44,14 @@ interface NavItem {
   color?: string;
 }
 
+const welcomeNav: NavItem[] = [{ title: 'Bem-vindo', href: '/', icon: Star }];
+
 const personalNav: NavItem[] = [
   { title: 'Minhas Propriedades', href: '/properties', icon: LayoutDashboard },
   // { title: 'Documentos', href: '/documents', icon: FileText },
 ];
 
-interface AdminNavItem {
-  title: string;
-  href: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}
-
-const adminNav: AdminNavItem[] = [
+const adminNav: NavItem[] = [
   // { title: "Usuários", href: "/users", icon: User },
   // { title: "Permissões", href: "/permissions", icon: RollerCoaster },
 ];
@@ -128,6 +125,29 @@ export default function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
+        {welcomeNav.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Boas-vindas</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {welcomeNav.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.href}
+                    >
+                      <Link to={item.href}>
+                        <item.icon className={styles.iconBase} />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
         {personalNav.length > 0 && (
           <SidebarGroup>
             <SidebarGroupLabel>Monitoramento</SidebarGroupLabel>

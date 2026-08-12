@@ -1,0 +1,180 @@
+.container {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.heroCard {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  background-color: var(--card);
+}
+
+.heroBg {
+  position: relative;
+  background: linear-gradient(
+    to bottom right,
+    color-mix(in srgb, var(--primary) 15%, transparent),
+    color-mix(in srgb, var(--primary) 5%, transparent),
+    var(--secondary)
+  );
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .heroBg {
+    padding: 3rem;
+  }
+}
+
+.heroPattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--primary) 35%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 18px 18px;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+.heroIconBox {
+  display: flex;
+  margin: 0 auto;
+  width: 3.5rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.title {
+  margin-top: 1.25rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+}
+
+.subtitle {
+  margin: 0.5rem auto 0;
+  max-width: 36rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+/* Steps Grid */
+.stepsGrid {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .stepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Estilos de Status do Step */
+.stepCard {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  transition: all 0.2s ease;
+}
+
+/* Card concluído: Opacidade levemente reduzida, fundo e borda verdes */
+.stepCardCompleted {
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+  background-color: color-mix(in srgb, var(--primary) 4%, transparent);
+  opacity: 0.7;
+}
+
+.stepIconBox {
+  display: flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  transition: all 0.2s;
+}
+
+.stepIconBoxCompleted {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.stepTitleCompleted {
+  color: var(--primary);
+}
+
+.checkIcon {
+  color: var(--primary);
+}
+
+.stepText {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin-bottom: 0;
+}
+
+/* CTA */
+.ctaContainer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.exploreLink {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  text-underline-offset: 4px;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.exploreLink:hover {
+  color: var(--foreground);
+}
