@@ -60,10 +60,13 @@ export default function NewPropertyPage() {
     };
 
     try {
-      await createProperty(propertyData);
+      // Captura o retorno da API que contem o objeto gerado
+      const createdProperty = await createProperty(propertyData);
 
       toast.success('Propriedade cadastrada com sucesso!');
-      navigate('/properties');
+
+      // Redireciona dinamicamente usando o ID retornado
+      navigate(`/properties/${createdProperty.id}`);
     } catch (error) {
       toast.error('Erro ao cadastrar. Verifique os dados e tente novamente.');
     }
