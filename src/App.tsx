@@ -16,6 +16,7 @@ import AppLayout from './components/layout/app-layout/AppLayout';
 import LoadingPage from './pages/loading/Loading';
 
 // pages
+import WelcomePage from './pages/welcome/Welcome';
 import SettingsPage from './pages/settings/Settings';
 import DocumentsPage from './pages/documents/Documents';
 import PropertiesPage from './pages/properties/Properties';
@@ -68,7 +69,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               {/* Rotas pessoal */}
-              <Route path="/" element={<PropertiesPage />} />
+              <Route path="/" element={<WelcomePage />} />
               <Route path="/properties" element={<PropertiesPage />} />
               <Route path="/properties/new" element={<SearchSicarPage />} />
               <Route
