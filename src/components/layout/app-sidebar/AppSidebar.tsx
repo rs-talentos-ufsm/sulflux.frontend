@@ -44,7 +44,7 @@ interface NavItem {
 }
 
 const personalNav: NavItem[] = [
-  { title: 'Minhas Propriedades', href: '/', icon: LayoutDashboard },
+  { title: 'Minhas Propriedades', href: '/properties', icon: LayoutDashboard },
   // { title: 'Documentos', href: '/documents', icon: FileText },
 ];
 

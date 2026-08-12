@@ -7,7 +7,7 @@ import styles from './Register.module.css';
 import { useRegister, useLogin } from '../../../hooks/useAuth';
 import { useAuthStore } from '../../../store/authStore';
 import { AuthEnums } from '@lib/shared';
-import { PasswordStrengthMeter } from '@/components/utils/password-strength-meter';
+import { PasswordStrengthMeter } from '@/components/utils/password-strength-metter/password-strength-meter';
 
 interface RegisterProps {
   onNavigateToLogin: () => void;

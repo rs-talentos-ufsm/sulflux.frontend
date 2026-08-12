@@ -19,6 +19,8 @@ import LoadingPage from './pages/loading/Loading';
 import SettingsPage from './pages/settings/Settings';
 import DocumentsPage from './pages/documents/Documents';
 import PropertiesPage from './pages/properties/Properties';
+import SearchSicarPage from './pages/properties/search-sicar/SearchSicar';
+import NewPropertyPage from './pages/properties/new-property/NewProperty';
 
 const AuthLoader = () => {
   const { data, status: queryStatus } = useUser();
@@ -67,6 +69,12 @@ function App() {
             <Route element={<AppLayout />}>
               {/* Rotas pessoal */}
               <Route path="/" element={<PropertiesPage />} />
+              <Route path="/properties" element={<PropertiesPage />} />
+              <Route path="/properties/new" element={<SearchSicarPage />} />
+              <Route
+                path="/properties/new/details"
+                element={<NewPropertyPage />}
+              />
               <Route path="/documents" element={<DocumentsPage />} />
 
               <Route path="/settings" element={<SettingsPage />} />

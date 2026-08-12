@@ -1,3 +1,4 @@
+import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { SidebarTrigger } from '../../ui/sidebar/sidebar';
 import { Separator } from '../../ui/separator/separator';
@@ -10,7 +11,6 @@ import {
 } from '../../ui/breadcrumb/breadcrumb';
 import { Button } from '../../ui/button/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar/avatar';
-// import { Input } from "@/components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,17 +23,18 @@ import styles from './AppHeader.module.css';
 import { useLogout } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
 
+// Dicionário mapeando cada segmento isolado da URL para seu respectivo rótulo
 const routeLabels: Record<string, string> = {
-  '/': 'Minhas Propriedades',
-  '/settings': 'Notificacoes',
+  properties: 'Minhas Propriedades',
+  new: 'Nova Propriedade',
+  details: 'Detalhes da Propriedade',
+  settings: 'Notificações',
 };
 
 export default function AppHeader() {
   const user = useAuthStore((state) => state.user);
-
   const location = useLocation();
   const pathname = location.pathname;
-  const currentLabel = routeLabels[pathname] || 'Pagina';
 
   const { mutate: logout, isPending } = useLogout();
 
@@ -41,6 +42,11 @@ export default function AppHeader() {
     e.preventDefault();
     logout();
   };
+
+  // Separa o pathname em um array removendo barras vazias
+  // Ex: '/properties/new' -> ['properties', 'new']
+  const pathSegments = pathname.split('/').filter(Boolean);
+  const isRoot = pathSegments.length === 0;
 
   return (
     <header className={styles.header}>
@@ -52,33 +58,40 @@ export default function AppHeader() {
           <BreadcrumbItem>
             <span className={styles.mutedText}>Sulflux</span>
           </BreadcrumbItem>
+
           <BreadcrumbSeparator />
 
-          <BreadcrumbItem>
-            <BreadcrumbPage>{currentLabel}</BreadcrumbPage>
-          </BreadcrumbItem>
+          {/* Caso esteja na raiz, força a renderização de "Minhas Propriedades" */}
+          {isRoot ? (
+            <BreadcrumbItem>
+              <BreadcrumbPage>Minhas Propriedades</BreadcrumbPage>
+            </BreadcrumbItem>
+          ) : (
+            // Itera sobre os fragmentos para construir o pão de migalhas
+            pathSegments.map((segment, index) => {
+              const isLast = index === pathSegments.length - 1;
+              const label = routeLabels[segment] || segment;
+
+              return (
+                <React.Fragment key={segment}>
+                  <BreadcrumbItem>
+                    {isLast ? (
+                      <BreadcrumbPage>{label}</BreadcrumbPage>
+                    ) : (
+                      <span className={styles.mutedText}>{label}</span>
+                    )}
+                  </BreadcrumbItem>
+
+                  {/* Só renderiza o separador se não for o último item */}
+                  {!isLast && <BreadcrumbSeparator />}
+                </React.Fragment>
+              );
+            })
+          )}
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className={styles.rightSection}>
-        {/* <div className="relative hidden md:block">
-          <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar na sua jornada..."
-            className="h-8 w-56 bg-background pl-8 text-sm"
-          />
-        </div> */}
-
-        {/* <Button variant="ghost" size="icon" className="relative h-8 w-8" asChild>
-          <Link href="/notificacoes">
-            <Bell className="size-4" />
-            <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground">
-              3
-            </span>
-            <span className="sr-only">Notificacoes</span>
-          </Link>
-        </Button> */}
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className={styles.avatarButton}>
@@ -127,7 +140,6 @@ export default function AppHeader() {
             <DropdownMenuItem asChild>
               <Link to="/settings">Perfil e Conta</Link>
             </DropdownMenuItem>
-            {/* <DropdownMenuItem>Ajuda</DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className={styles.textDestructive}

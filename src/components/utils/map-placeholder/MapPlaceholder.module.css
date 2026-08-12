@@ -1,0 +1,87 @@
+/* src/components/properties/map-placeholder.module.css */
+
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background-color: #0d1a12; /* Fundo verde super escuro (estilo radar) */
+}
+
+/* Efeito de luz/profundidade (Vignette) */
+.fallbackGradient {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      circle at 25% 35%,
+      rgba(34, 197, 94, 0.18) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 70%,
+      rgba(34, 197, 94, 0.15) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(34, 197, 94, 0.1) 0%,
+      transparent 60%
+    );
+  z-index: 0;
+}
+/* Grid sutil */
+.fallbackGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+/* Camadas Reais (Imagens ou Mapas) */
+.imageLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  /* Esconde o texto alternativo caso a imagem quebre antes do onError atuar */
+  color: transparent;
+}
+
+.mapLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Overlay do Talhão (SVG) */
+.svgOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Deixa o clique passar para o mapa real */
+  z-index: 2;
+}
+
+/* Rótulo / Label Invertido (Claro com texto escuro) */
+.label {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  border-radius: 0.375rem;
+  background-color: #e2e8f0; /* Fundo cinza bem claro/branco */
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  color: #0f172a; /* Texto escuro para contraste */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 3;
+}
