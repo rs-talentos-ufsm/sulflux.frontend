@@ -27,6 +27,7 @@ import { useAuthStore } from '@/store/authStore';
 const routeLabels: Record<string, string> = {
   properties: 'Minhas Propriedades',
   new: 'Nova Propriedade',
+  'fields-new': 'Novo Talhão',
   details: 'Detalhes da Propriedade',
   settings: 'Notificações',
 };

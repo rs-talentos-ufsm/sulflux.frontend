@@ -137,14 +137,14 @@
 }
 
 /* Talhões Section */
-.talhoesHeader {
+.fieldsHeader {
   margin-top: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.talhoesTitle {
+.fieldsTitle {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -154,13 +154,13 @@
   margin: 0;
 }
 
-.talhoesSubtitle {
+.fieldsSubtitle {
   font-size: 0.875rem;
   color: var(--muted-foreground);
   margin-top: 0.25rem;
 }
 
-.talhoesGrid {
+.fieldsGrid {
   margin-top: 1rem;
   display: grid;
   grid-template-columns: 1fr;
@@ -168,19 +168,19 @@
 }
 
 @media (min-width: 640px) {
-  .talhoesGrid {
+  .fieldsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .talhoesGrid {
+  .fieldsGrid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* New Talhão Card */
-.newTalhaoCard {
+.newFieldCard {
   display: flex;
   min-height: 17.5rem;
   flex-direction: column;
@@ -196,12 +196,12 @@
   transition: all 0.2s ease;
 }
 
-.newTalhaoCard:hover {
+.newFieldCard:hover {
   border-color: color-mix(in srgb, var(--primary) 50%, transparent);
   background-color: var(--secondary);
 }
 
-.newTalhaoIcon {
+.newFieldIcon {
   display: flex;
   width: 3rem;
   height: 3rem;
@@ -212,14 +212,14 @@
   color: var(--primary);
 }
 
-.newTalhaoTitle {
+.newFieldTitle {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0;
 }
 
-.newTalhaoDesc {
+.newFieldDesc {
   margin-top: 0.25rem;
   font-size: 0.75rem;
   color: var(--muted-foreground);

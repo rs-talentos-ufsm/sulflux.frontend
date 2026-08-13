@@ -23,6 +23,7 @@ import PropertiesPage from './pages/properties/Properties';
 import SearchSicarPage from './pages/properties/search-sicar/SearchSicar';
 import NewPropertyPage from './pages/properties/new-property/NewProperty';
 import PropertyPage from './pages/properties/property/Property';
+import NewFieldPage from './pages/field/NewField';
 
 const AuthLoader = () => {
   const { data, status: queryStatus } = useUser();
@@ -78,6 +79,10 @@ function App() {
                 element={<NewPropertyPage />}
               />
               <Route path="/properties/:id" element={<PropertyPage />} />
+              <Route
+                path="/properties/:id/fields-new"
+                element={<NewFieldPage />}
+              />
 
               <Route path="/documents" element={<DocumentsPage />} />
 
