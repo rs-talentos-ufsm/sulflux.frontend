@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button/button';
 import { MapPlaceholder } from '@/components/utils/map-placeholder/map-placeholder';
 import { FieldCard } from '@/components/cards/field-card/field-card';
 
+import { InfoItem } from './InfoItem';
+
 // Hooks da API
 import { useProperty } from '@/hooks/useProperty';
 import { PropertyStatus, FieldStatus } from '@lib/shared';
@@ -167,26 +169,6 @@ export default function PropertyPage() {
           </div>
         </Link>
       </div>
-    </div>
-  );
-}
-
-function InfoItem({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ size?: number }>;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div>
-      <dt className={styles.infoLabel}>
-        <Icon size={12} />
-        {label}
-      </dt>
-      <dd className={styles.infoValue}>{value}</dd>
     </div>
   );
 }
