@@ -10,6 +10,10 @@ const mockAxiosInstance = vi.hoisted(() => {
     post: vi.fn(),
     put: vi.fn(),
     delete: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() },
+    },
   };
 });
 
@@ -35,7 +39,7 @@ describe('Página de Health', () => {
       </MemoryRouter>,
     );
 
-    const titulo = screen.getByText(/Frontend - Hello, World/i);
+    const titulo = screen.getByText(/Status do Sistema/i);
     expect(titulo).toBeInTheDocument();
 
     await waitFor(() => {

@@ -17,6 +17,8 @@ import { Button } from '@/components/ui/button/button';
 import { type PropertyResponseDTO, PropertyStatus } from '@lib/shared';
 
 import styles from './PropertyCard.module.css';
+import { useDeleteProperty } from '@/hooks/useProperty';
+import { toast } from 'sonner';
 
 export type UIProperty = PropertyResponseDTO & {
   area?: string;
@@ -26,6 +28,7 @@ export type UIProperty = PropertyResponseDTO & {
 
 export function PropertyCard({ property }: { property: UIProperty }) {
   const isConfigure = property.status === PropertyStatus.Configure;
+  const deleteTaskMutation = useDeleteProperty();
 
   // TODO: Quando o backend começar a enviar o relacionamento "property.talhoes",
   // basta descomentar essa lógica para calcular dinamicamente.
@@ -170,6 +173,15 @@ export function PropertyCard({ property }: { property: UIProperty }) {
               size="icon"
               aria-label="Excluir propriedade"
               className={styles.btnDestructive}
+              onClick={() => {
+                if (property.id) {
+                  deleteTaskMutation.mutate(property.id, {
+                    onSuccess: () => {
+                      toast.success('Propriedade deletada com sucesso!');
+                    },
+                  });
+                }
+              }}
             >
               <Trash2 size={16} />
             </Button>

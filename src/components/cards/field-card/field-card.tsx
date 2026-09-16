@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Ruler,
@@ -10,6 +9,7 @@ import {
   BarChart3,
   CalendarCog,
   Clock,
+  type LucideIcon,
 } from 'lucide-react';
 
 import { Card } from '@/components/ui/card/card';
@@ -193,7 +193,7 @@ function Metric({
   label,
   value,
 }: {
-  icon: React.ComponentType<{ size?: number }>;
+  icon: LucideIcon;
   label: string;
   value: string;
 }) {

@@ -7,11 +7,14 @@ import {
   Sun,
   Moon,
   Monitor,
-  Heart,
   Leaf,
   Star,
 } from 'lucide-react';
+
 import { useTheme } from '../../../hooks/useTheme';
+import { useLogout } from '@/hooks/useAuth';
+import { useAuthStore } from '@/store/authStore';
+
 import {
   Sidebar,
   SidebarContent,
@@ -28,13 +31,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu/dropdown-menu';
 
 import styles from './AppSidebar.module.css';
-import { useLogout } from '@/hooks/useAuth';
-import { useAuthStore } from '@/store/authStore';
 
 interface NavItem {
   title: string;
@@ -56,11 +58,8 @@ const adminNav: NavItem[] = [
   // { title: "Permissões", href: "/permissions", icon: RollerCoaster },
 ];
 
-// const teams = [];
-
 export default function AppSidebar() {
   const user = useAuthStore((state) => state.user);
-
   const location = useLocation();
   const pathname = location.pathname;
   const { theme, setTheme } = useTheme();
@@ -195,6 +194,7 @@ export default function AppSidebar() {
         )}
       </SidebarContent>
 
+      {/* FOOTER: CONFIGURAÇÕES, TEMA E PERFIL */}
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -204,12 +204,12 @@ export default function AppSidebar() {
                 <span>Configurações</span>
               </Link>
             </SidebarMenuButton>
-            <SidebarMenuButton asChild isActive={pathname === '/health'}>
+            {/* <SidebarMenuButton asChild isActive={pathname === '/health'}>
               <Link to="/health">
                 <Heart className={styles.iconBase} />
                 <span>Saúde</span>
               </Link>
-            </SidebarMenuButton>
+            </SidebarMenuButton> */}
           </SidebarMenuItem>
 
           <SidebarMenuItem>
@@ -241,21 +241,18 @@ export default function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
+                <SidebarMenuButton size="lg" className={styles.orgTrigger}>
                   <div className={styles.avatarPlaceholder}>
-                    <span>
-                      {user?.name
-                        ?.split(' ')
-                        .slice(0, 2)
-                        .map((n) => n[0])
-                        .join('')
-                        .toUpperCase() || 'US'}
-                    </span>
+                    {user?.name
+                      ?.split(' ')
+                      .slice(0, 2)
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase() || 'US'}
                   </div>
                   <div className={styles.textWrapper}>
                     <span className={styles.textTitle}>
-                      {user?.name?.split(' ').slice(0, 2).join(' ') ||
-                        'Usuário'}
+                      {user?.name || 'Usuário'}
                     </span>
                     <span className={styles.textSubtitle}>
                       {user?.email || 'Email não disponível'}
@@ -270,8 +267,14 @@ export default function AppSidebar() {
                 side="top"
                 sideOffset={4}
               >
+                <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuItem asChild>
-                  <Link to="/settings">Perfil e Conta</Link>
+                  <Link
+                    to="/settings"
+                    style={{ display: 'flex', width: '100%' }}
+                  >
+                    Perfil e Conta
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

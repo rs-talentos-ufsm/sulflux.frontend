@@ -1,74 +1,137 @@
+/* Base borders */
 .sidebarBorder {
-  border-inline-end: 1px solid var(--sidebar-border);
+  border-right: 1px solid var(--sidebar-border);
 }
 
-/* Header & Logos */
-.orgTrigger[data-state='open'] {
-  background-color: var(--sidebar-accent);
+/* Remove sublinhados nativos dos links */
+a {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+/* --- Header Logo & Brand --- */
+.header {
+  border-bottom: 1px solid var(--sidebar-border);
+  max-height: 3.5rem;
+  min-height: 3.5rem;
+}
+
+.orgTrigger {
+  padding: 0.5rem;
 }
 
 .orgLogo {
-  display: inline-flex;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
   border-radius: 0.5rem;
   background-color: var(--primary);
   color: var(--primary-foreground);
-  font-size: 0.875rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
-.icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-/* Typography & Layout */
 .textWrapper {
   display: grid;
   flex: 1;
-  text-align: start;
+  text-align: left;
+  font-size: 0.875rem;
   line-height: 1.25;
-
-  & .textTitle,
-  & .textSubtitle {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  & .textTitle {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  & .textSubtitle {
-    font-size: 0.75rem;
-    color: var(--muted-foreground);
-  }
+  min-width: 0; /* Impede vazamento no truncate */
 }
 
-/* Ícones */
-.iconRight {
-  margin-inline-start: auto;
-  width: 1rem;
-  height: 1rem;
+.textTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
 }
 
-/* Agrupamento de propriedades idênticas */
-.iconItem,
+.textSubtitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* --- Grupos e Menus --- */
+.groupBorderTop {
+  border-top: 1px solid var(--sidebar-border);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
 .iconBase {
   width: 1rem;
   height: 1rem;
+  flex-shrink: 0;
 }
 
-.iconItem {
-  margin-inline-end: 0.5rem;
+.iconRight {
+  width: 1rem;
+  height: 1rem;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
-/* Dropdown Menu */
+/* --- Theme Toggle Inline --- */
+.themeToggleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.themeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  padding: 0.375rem;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.themeButton:hover {
+  color: var(--foreground);
+}
+
+.themeButtonActive {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* --- Avatar do Usuário --- */
+.avatarPlaceholder {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50rem;
+  color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* --- Dropdown Menus --- */
 .dropdownWidth {
   width: 14rem;
 }
@@ -76,56 +139,61 @@
 .teamColor {
   width: 1rem;
   height: 1rem;
-  margin-inline-end: 0.5rem;
   border-radius: 0.25rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.iconItem {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+.menuItemFlex {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .textDestructive {
   color: var(--destructive);
-}
-
-/* Theme Toggle */
-.themeToggleWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
-}
-
-.themeButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.375rem;
-  border: none;
-  border-radius: 0.375rem;
-  background: transparent;
-  color: var(--muted-foreground);
   cursor: pointer;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-
-  &:hover {
-    color: var(--foreground);
-  }
-
-  &.themeButtonActive {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
-  }
 }
 
-/* Avatar Placeholder */
-.avatarPlaceholder {
-  display: inline-flex;
-  align-items: center;
+.textDestructive:hover {
+  background-color: rgba(220, 38, 38, 0.1) !important;
+  color: var(--destructive) !important;
+}
+
+/* ================================================== */
+/* ESTADOS DA SIDEBAR MINIMIZADA (COLLAPSED)          */
+/* ================================================== */
+
+/* Oculta textos secundários e ícones de chevron quando fechada */
+:global([data-collapsible='icon']) .textWrapper,
+:global([data-collapsible='icon']) .iconRight {
+  display: none !important;
+}
+
+/* Centraliza o botão de avatar e logo perfeitamente */
+:global([data-collapsible='icon']) .orgTrigger {
+  padding: 0 !important;
+  justify-content: center !important;
+}
+
+/* Força os ícones a ficarem centralizados */
+:global([data-collapsible='icon']) .orgLogo,
+:global([data-collapsible='icon']) .avatarPlaceholder {
+  margin: 0 auto;
+}
+
+/* Ajusta o switch de tema: mostra APENAS o botão do tema atual ativado */
+:global([data-collapsible='icon']) .themeToggleWrapper {
+  padding: 0;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
-  color: var(--primary);
-  font-size: 0.75rem;
-  font-weight: 600;
+}
+
+:global([data-collapsible='icon']) .themeButton:not(.themeButtonActive) {
+  display: none !important;
 }

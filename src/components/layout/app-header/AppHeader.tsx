@@ -27,9 +27,17 @@ import { useAuthStore } from '@/store/authStore';
 const routeLabels: Record<string, string> = {
   properties: 'Minhas Propriedades',
   new: 'Nova Propriedade',
-  'fields-new': 'Novo Talhão',
   details: 'Detalhes da Propriedade',
-  settings: 'Notificações',
+  'fields-new': 'Novo Talhão',
+  fields: 'Talhões',
+  season: 'Safra',
+  documents: 'Documentos',
+  settings: 'Configurações',
+  profile: 'Perfil',
+  account: 'Conta',
+  notifications: 'Notificações',
+  users: 'Usuários',
+  permissions: 'Permissões',
 };
 
 export default function AppHeader() {
