@@ -6,7 +6,24 @@ import {
   type PropertyResponseDTO,
   type UpdatePropertyDTO,
   type PropertyQueryDTO,
+  type CarLookupResponseDTO,
 } from '@lib/shared';
+
+// Consultar dados do CAR (SICAR)
+export const useCarLookup = (carNumber?: string | null, enabled = false) => {
+  return useQuery<CarLookupResponseDTO>({
+    queryKey: ['car-lookup', carNumber],
+    queryFn: async () => {
+      if (!carNumber) throw new Error('Número do CAR é obrigatório');
+      const response = await api.get('/api/properties/car/lookup', {
+        params: { car: carNumber.trim() },
+      });
+      return response.data;
+    },
+    enabled: enabled && !!carNumber && carNumber.trim().length >= 8,
+    retry: false,
+  });
+};
 
 // Buscar propriedades com paginação e filtros
 export const useProperties = (filters: PropertyQueryDTO) => {

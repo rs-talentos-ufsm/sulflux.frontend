@@ -25,6 +25,13 @@ import NewPropertyPage from './pages/properties/new-property/NewProperty';
 import PropertyPage from './pages/properties/property/Property';
 import NewFieldPage from './pages/field/NewField';
 import SeasonPage from './pages/season/Season';
+import FieldResultsPage from './pages/field/field-results/FieldResults';
+import MonitoringHistoryPage from './pages/properties/monitoring-history/MonitoringHistoryPage';
+import MapPage from './pages/map/Map';
+import CarbonPage from './pages/carbon/Carbon';
+import WaterPage from './pages/water/Water';
+import ReportsPage from './pages/reports/Reports';
+import AssistantPage from './pages/assistant/Assistant';
 
 const AuthLoader = () => {
   const { data, status: queryStatus } = useUser();
@@ -71,7 +78,7 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
-              {/* Rotas pessoal */}
+              {/* Rotas monitoramento agrícola e ambiental */}
               <Route path="/" element={<WelcomePage />} />
               <Route path="/properties" element={<PropertiesPage />} />
               <Route path="/properties/new" element={<SearchSicarPage />} />
@@ -81,6 +88,10 @@ function App() {
               />
               <Route path="/properties/:id" element={<PropertyPage />} />
               <Route
+                path="/properties/:propertyId/monitoring"
+                element={<MonitoringHistoryPage />}
+              />
+              <Route
                 path="/properties/:id/fields-new"
                 element={<NewFieldPage />}
               />
@@ -88,8 +99,17 @@ function App() {
                 path="/properties/:propertyId/fields/:fieldId/season"
                 element={<SeasonPage />}
               />
+              <Route
+                path="/properties/:propertyId/fields/:fieldId/results"
+                element={<FieldResultsPage />}
+              />
 
+              <Route path="/map" element={<MapPage />} />
+              <Route path="/carbon" element={<CarbonPage />} />
+              <Route path="/water" element={<WaterPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
               <Route path="/documents" element={<DocumentsPage />} />
+              <Route path="/assistant" element={<AssistantPage />} />
 
               <Route path="/settings" element={<SettingsPage />} />
             </Route>

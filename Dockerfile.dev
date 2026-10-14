@@ -1,31 +1,25 @@
+# syntax=docker/dockerfile:1
 # =========================
 # ESTÁGIO: Desenvolvimento
 # =========================
-FROM node:22-slim
+FROM node:22-alpine
 
 WORKDIR /app
-
-# Instala git apenas se necessário para resolver dependências de pacotes
-RUN apt-get update && \
-    apt-get install -y git && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache git
 
 # Copia as definições de pacotes primeiro para aproveitar o cache do Docker
 COPY package*.json ./
 
-# Instala todas as dependências (incluindo devDependencies)
 # Garante que git use HTTPS (não SSH) — evita falha quando o host tem
 # 'url.insteadOf' configurado para redirecionar HTTPS→SSH
 RUN git config --global url."https://github.com/".insteadOf "git@github.com:" && \
     git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
 
-RUN npm install
+# Instala todas as dependências com cache mount do BuildKit
+RUN --mount=type=cache,target=/root/.npm npm install
 
 # Copia o restante do código-fonte do frontend para o container
 COPY . .
-
-# Comando final de build
-# RUN npm run build
 
 EXPOSE 5173
 CMD ["npm", "run", "dev"]

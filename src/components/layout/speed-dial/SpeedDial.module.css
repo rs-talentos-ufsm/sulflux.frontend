@@ -1,0 +1,96 @@
+.speedDialContainer {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  border: none;
+  cursor: pointer;
+}
+
+.actionsList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.actionItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.actionItem:hover {
+  transform: translateX(-4px);
+}
+
+.actionLabel {
+  background-color: var(--card);
+  color: var(--foreground);
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.actionIconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.actionIconBox:hover {
+  transform: scale(1.08);
+}
+
+.mainFab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.mainFab:hover {
+  transform: scale(1.06);
+}
+
+.mainFabOpen {
+  background-color: #ef4444;
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+  transform: rotate(45deg);
+}

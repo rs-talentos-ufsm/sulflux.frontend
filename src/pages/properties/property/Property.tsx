@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   MapPin,
@@ -32,6 +32,39 @@ export default function PropertyPage() {
   });
 
   const fields = fieldsData?.data || [];
+
+  const svgPolygonPoints = useMemo(() => {
+    const coords = property?.coordinates;
+    if (!coords || !Array.isArray(coords) || coords.length < 3)
+      return undefined;
+
+    const lats = coords.map((c: any) => c.lat);
+    const lngs = coords.map((c: any) => c.lng);
+
+    const minLat = Math.min(...lats);
+    const maxLat = Math.max(...lats);
+    const minLng = Math.min(...lngs);
+    const maxLng = Math.max(...lngs);
+
+    const latSpan = maxLat - minLat || 0.001;
+    const lngSpan = maxLng - minLng || 0.001;
+
+    const width = 360;
+    const height = 260;
+    const padding = 30;
+
+    return coords
+      .map((c: any) => {
+        const x = Math.round(
+          padding + ((c.lng - minLng) / lngSpan) * (width - 2 * padding),
+        );
+        const y = Math.round(
+          padding + ((maxLat - c.lat) / latSpan) * (height - 2 * padding),
+        );
+        return `${x},${y}`;
+      })
+      .join(' ');
+  }, [property?.coordinates]);
 
   const counts = {
     total: fields.length,
@@ -92,7 +125,11 @@ export default function PropertyPage() {
               <InfoItem
                 icon={Ruler}
                 label="Área Total"
-                value={/* property.area || */ '-- ha'}
+                value={
+                  property.area
+                    ? `${property.area.toLocaleString('pt-BR')} ha`
+                    : '-- ha'
+                }
               />
               <InfoItem
                 icon={Layers}
@@ -126,9 +163,13 @@ export default function PropertyPage() {
         {/* Mapa da propriedade */}
         <MapPlaceholder
           outline="primary"
-          label="Contorno da Propriedade"
+          label={
+            property.area
+              ? `Perímetro da Propriedade (${property.area.toLocaleString('pt-BR')} ha)`
+              : 'Contorno da Propriedade'
+          }
+          polygonPoints={svgPolygonPoints}
           style={{ minHeight: '220px' }}
-          // imageUrl={property.coverImage} // Quando a capa for implementada
         />
       </div>
 

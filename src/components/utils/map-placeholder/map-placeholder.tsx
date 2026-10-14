@@ -9,6 +9,7 @@ interface MapPlaceholderProps {
   imageUrl?: string | null;
   mapComponent?: React.ReactNode;
   showPolygon?: boolean;
+  polygonPoints?: string;
   children?: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ export function MapPlaceholder({
   imageUrl,
   mapComponent,
   showPolygon = true,
+  polygonPoints,
   children,
 }: MapPlaceholderProps) {
   const strokeColor = outline === 'amber' ? '#f59e0b' : '#22c55e';
@@ -60,7 +62,9 @@ export function MapPlaceholder({
           preserveAspectRatio="xMidYMid meet"
         >
           <polygon
-            points="90,70 300,60 340,160 260,250 110,230 70,150"
+            points={
+              polygonPoints || '90,70 300,60 340,160 260,250 110,230 70,150'
+            }
             fill={strokeColor}
             fillOpacity="0.15"
             stroke={strokeColor}

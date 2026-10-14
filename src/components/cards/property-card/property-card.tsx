@@ -20,8 +20,8 @@ import styles from './PropertyCard.module.css';
 import { useDeleteProperty } from '@/hooks/useProperty';
 import { toast } from 'sonner';
 
-export type UIProperty = PropertyResponseDTO & {
-  area?: string;
+export type UIProperty = Omit<PropertyResponseDTO, 'area'> & {
+  area?: number | string | null;
   lastAccess?: string;
   // talhoes?: Array<{ id: string; status: 'aguardando' | 'processando' | 'pronto' }>
 };
@@ -91,8 +91,11 @@ export function PropertyCard({ property }: { property: UIProperty }) {
               <Ruler size={12} />
               Área Total
             </div>
-            {/* Fallback para a área enquanto não vem da API */}
-            <p className={styles.metricValue}>{property.area || '-- ha'}</p>
+            <p className={styles.metricValue}>
+              {typeof property.area === 'number'
+                ? `${property.area} ha`
+                : property.area || '-- ha'}
+            </p>
           </div>
           <div className={styles.metricDivider} />
           <div className={styles.metricItem}>

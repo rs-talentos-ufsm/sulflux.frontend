@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import {
   Search,
@@ -13,16 +11,13 @@ import {
   List,
   Download,
   Trash2,
-  Eye,
-  X,
   CloudUpload,
-  CheckCircle2,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button/button';
 import { Input } from '@/components/ui/input/input';
 import { Card, CardContent } from '@/components/ui/card/card';
 import { Badge } from '@/components/ui/badge/badge';
-import { Progress } from '@/components/ui/progress/progress';
 import {
   Table,
   TableBody,
@@ -42,494 +37,482 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar/avatar';
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area/scroll-area';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select/select';
+import { toast } from 'sonner';
+import {
+  useDocumentsList,
+  useDocumentFolders,
+  useCreateDocument,
+  useDeleteDocument,
+} from '@/hooks/useDocuments';
+import { DocumentType } from '@lib/shared';
+
 import styles from './Documents.module.css';
 
-const folders = [
-  { name: 'General Knowledge', files: 10, theme: 'blue' },
-  { name: 'Onboarding', files: 15, theme: 'emerald' },
-  { name: 'Integrations', files: 8, theme: 'amber' },
-  { name: 'Design Assets', files: 24, theme: 'pink' },
-  { name: 'Sprint Reports', files: 12, theme: 'violet' },
-  { name: 'Contracts', files: 6, theme: 'red' },
-];
-
-const files = [
-  {
-    id: 1,
-    name: 'wireframe-v3.fig',
-    type: 'design',
-    size: '2.4 MB',
-    addedBy: { name: 'Fernando D.', initials: 'FD' },
-    date: '08/02/2026',
-    folder: 'Design Assets',
-  },
-  {
-    id: 2,
-    name: 'api-documentation.pdf',
-    type: 'pdf',
-    size: '1.2 MB',
-    addedBy: { name: 'Maria S.', initials: 'MS' },
-    date: '07/02/2026',
-    folder: 'Integrations',
-  },
-  {
-    id: 3,
-    name: 'sprint-retrospective-w5.docx',
-    type: 'doc',
-    size: '340 KB',
-    addedBy: { name: 'Carlos R.', initials: 'CR' },
-    date: '07/02/2026',
-    folder: 'Sprint Reports',
-  },
-  {
-    id: 4,
-    name: 'brand-guidelines.pdf',
-    type: 'pdf',
-    size: '5.8 MB',
-    addedBy: { name: 'Julia M.', initials: 'JM' },
-    date: '06/02/2026',
-    folder: 'Design Assets',
-  },
-  {
-    id: 5,
-    name: 'budget-q1-2026.xlsx',
-    type: 'spreadsheet',
-    size: '890 KB',
-    addedBy: { name: 'Ana L.', initials: 'AL' },
-    date: '05/02/2026',
-    folder: 'General Knowledge',
-  },
-  {
-    id: 6,
-    name: 'onboarding-checklist.md',
-    type: 'doc',
-    size: '45 KB',
-    addedBy: { name: 'Fernando D.', initials: 'FD' },
-    date: '04/02/2026',
-    folder: 'Onboarding',
-  },
-  {
-    id: 7,
-    name: 'architecture-diagram.png',
-    type: 'image',
-    size: '3.1 MB',
-    addedBy: { name: 'Carlos R.', initials: 'CR' },
-    date: '03/02/2026',
-    folder: 'Integrations',
-  },
-  {
-    id: 8,
-    name: 'user-research-findings.pdf',
-    type: 'pdf',
-    size: '2.7 MB',
-    addedBy: { name: 'Julia M.', initials: 'JM' },
-    date: '02/02/2026',
-    folder: 'General Knowledge',
-  },
-];
-
 const fileTypeIcons: Record<string, React.ReactNode> = {
-  pdf: <FileText className={`${styles.iconBase} ${styles.textRed}`} />,
-  doc: <FileText className={`${styles.iconBase} ${styles.textBlue}`} />,
-  spreadsheet: (
-    <FileSpreadsheet className={`${styles.iconBase} ${styles.textEmerald}`} />
-  ),
-  image: <ImageIcon className={`${styles.iconBase} ${styles.textPink}`} />,
-  design: <FileText className={`${styles.iconBase} ${styles.textViolet}`} />,
-};
-
-const mockUploads = [
-  {
-    name: 'my-cv.pdf',
-    size: '60 KB',
-    progress: 100,
-    status: 'completed' as const,
-  },
-  {
-    name: 'project-brief.docx',
-    size: '245 KB',
-    progress: 72,
-    status: 'uploading' as const,
-  },
-  {
-    name: 'screenshot.png',
-    size: '1.2 MB',
-    progress: 35,
-    status: 'uploading' as const,
-  },
-];
-
-const treeFolders = [
-  {
-    name: 'General Knowledge',
-    count: 10,
-    children: ['Guias', 'Processos', 'Templates'],
-  },
-  {
-    name: 'Onboarding',
-    count: 15,
-    children: ['Novos Membros', 'Setup', 'Cultura'],
-  },
-  { name: 'Integrations', count: 8, children: ['APIs', 'Webhooks'] },
-  { name: 'Design Assets', count: 24, children: ['UI Kit', 'Icons', 'Brand'] },
-  { name: 'Sprint Reports', count: 12, children: [] },
-  { name: 'Contracts', count: 6, children: [] },
-];
-
-const folderThemes: Record<string, string> = {
-  blue: styles.folderThemeBlue,
-  emerald: styles.folderThemeEmerald,
-  amber: styles.folderThemeAmber,
-  pink: styles.folderThemePink,
-  violet: styles.folderThemeViolet,
-  red: styles.folderThemeRed,
+  pdf: <FileText className={styles.iconRed} />,
+  doc: <FileText className={styles.iconBlue} />,
+  spreadsheet: <FileSpreadsheet className={styles.iconEmerald} />,
+  image: <ImageIcon className={styles.iconPink} />,
+  design: <FileText className={styles.iconViolet} />,
 };
 
 export default function DocumentsPage() {
   const [search, setSearch] = useState('');
+  const [selectedFolder, setSelectedFolder] = useState<string>('Todos');
   const [view, setView] = useState<'grid' | 'list'>('grid');
-  const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
-  const [uploadOpen, setUploadOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const filteredFiles = files.filter((f) => {
-    const matchesSearch = f.name.toLowerCase().includes(search.toLowerCase());
-    const matchesFolder = !selectedFolder || f.folder === selectedFolder;
-    return matchesSearch && matchesFolder;
-  });
+  // Form de novo documento
+  const [newName, setNewName] = useState('');
+  const [newFolder, setNewFolder] = useState('Certificações');
+  const [newType, setNewType] = useState<any>(DocumentType.Pdf);
+
+  const { data: documents = [], isLoading } = useDocumentsList(
+    search || undefined,
+    selectedFolder !== 'Todos' ? selectedFolder : undefined,
+  );
+  const { data: folders = [] } = useDocumentFolders();
+  const createDocument = useCreateDocument();
+  const deleteDocument = useDeleteDocument();
+
+  const handleCreateDocument = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newName.trim()) return;
+
+    try {
+      await createDocument.mutateAsync({
+        name: newName.trim().endsWith('.pdf')
+          ? newName.trim()
+          : `${newName.trim()}.pdf`,
+        folder: newFolder,
+        type: newType,
+        size: '1.5 MB',
+      });
+
+      toast.success('Documento registrado com sucesso!');
+      setNewName('');
+      setIsDialogOpen(false);
+    } catch {
+      toast.error('Erro ao registrar o documento.');
+    }
+  };
+
+  const handleDeleteDocument = async (id: string, name: string) => {
+    try {
+      await deleteDocument.mutateAsync(id);
+      toast.success(`Documento "${name}" excluído.`);
+    } catch {
+      toast.error('Erro ao excluir documento.');
+    }
+  };
+
+  const handleDownload = (name: string) => {
+    toast.info(`Iniciando download seguro de ${name}...`);
+  };
 
   return (
     <div className={styles.container}>
+      {/* Cabeçalho */}
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Documentos</h1>
+          <h1 className={styles.title}>Documentos & Laudos</h1>
           <p className={styles.subtitle}>
-            Gerenciador de arquivos e base de conhecimento
+            Armazene e gerencie certificações de carbono, laudos de solo e
+            relatórios de satélite.
           </p>
         </div>
-        <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
               <Upload className={styles.btnIconLeft} />
-              Upload
+              Enviar Arquivo
             </Button>
           </DialogTrigger>
           <DialogContent className={styles.dialogContent}>
             <DialogHeader>
-              <DialogTitle>Upload de Arquivos</DialogTitle>
+              <DialogTitle>Registrar Novo Laudo ou Documento</DialogTitle>
             </DialogHeader>
-            <div className={styles.dialogBody}>
+
+            <form onSubmit={handleCreateDocument} className={styles.dialogBody}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem',
+                }}
+              >
+                <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                  Nome do Arquivo
+                </label>
+                <Input
+                  placeholder="Ex: Laudo-Solo-Talhao-A.pdf"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '1rem',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                    Pasta / Categoria
+                  </label>
+                  <Select value={newFolder} onValueChange={setNewFolder}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Certificações">
+                        Certificações
+                      </SelectItem>
+                      <SelectItem value="Laudos Técnicos">
+                        Laudos Técnicos
+                      </SelectItem>
+                      <SelectItem value="CAR & Regularização">
+                        CAR & Regularização
+                      </SelectItem>
+                      <SelectItem value="Planilhas & Dados">
+                        Planilhas & Dados
+                      </SelectItem>
+                      <SelectItem value="Sensoriamento Remoto">
+                        Sensoriamento Remoto
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                    Tipo de Arquivo
+                  </label>
+                  <Select value={newType} onValueChange={setNewType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={DocumentType.Pdf}>
+                        PDF Document
+                      </SelectItem>
+                      <SelectItem value={DocumentType.Spreadsheet}>
+                        Planilha Excel
+                      </SelectItem>
+                      <SelectItem value={DocumentType.Image}>
+                        Imagem de Satélite
+                      </SelectItem>
+                      <SelectItem value={DocumentType.Doc}>
+                        Texto DOCX
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
               <div className={styles.dropzone}>
                 <CloudUpload className={styles.dropzoneIcon} />
                 <p className={styles.dropzoneTitle}>
-                  Escolha um arquivo ou arraste aqui
+                  Arraste o arquivo ou clique para selecionar
                 </p>
                 <p className={styles.dropzoneSubtitle}>
-                  PDF, DOCX, PNG, JPG até 10MB
+                  PDF, XLSX, PNG ou DOCX (até 20MB)
                 </p>
               </div>
-              <div className={styles.uploadList}>
-                {mockUploads.map((file) => (
-                  <div key={file.name} className={styles.uploadItem}>
-                    <FileText className={styles.uploadItemIcon} />
-                    <div className={styles.uploadItemDetails}>
-                      <div className={styles.uploadItemHeader}>
-                        <p className={styles.uploadItemName}>{file.name}</p>
-                        {file.status === 'completed' ? (
-                          <CheckCircle2 className={styles.iconCheck} />
-                        ) : (
-                          <span className={styles.uploadProgressText}>
-                            {file.progress}%
-                          </span>
-                        )}
-                      </div>
-                      <p className={styles.uploadItemSize}>{file.size}</p>
-                      <Progress
-                        value={file.progress}
-                        className={styles.progressBar}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+
+              <Button type="submit" disabled={createDocument.isPending}>
+                {createDocument.isPending && (
+                  <Loader2
+                    className="animate-spin"
+                    size={16}
+                    style={{ marginRight: '6px' }}
+                  />
+                )}
+                Salvar Documento
+              </Button>
+            </form>
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className={styles.mainLayout}>
-        <aside className={styles.sidebar}>
-          <div className={styles.searchWrapper}>
-            <Search className={styles.searchIcon} />
-            <Input placeholder="Buscar..." className={styles.searchInput} />
-          </div>
-          <Tabs defaultValue="folders">
-            <TabsList className={styles.tabsList}>
-              <TabsTrigger value="folders" className={styles.tabTrigger}>
-                Pastas
-              </TabsTrigger>
-              <TabsTrigger value="tags" className={styles.tabTrigger}>
-                Tags
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="folders" className={styles.tabsContent}>
-              <ScrollArea className={styles.scrollArea}>
-                <div className={styles.folderList}>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedFolder(null)}
-                    className={`${styles.folderItem} ${!selectedFolder ? styles.folderActive : styles.folderInactive}`}
-                  >
-                    <span>Todos os Arquivos</span>
-                    <Badge variant="secondary" className={styles.badgeCount}>
-                      {files.length}
-                    </Badge>
-                  </button>
-                  {treeFolders.map((folder) => (
-                    <button
-                      key={folder.name}
-                      type="button"
-                      onClick={() => setSelectedFolder(folder.name)}
-                      className={`${styles.folderItem} ${selectedFolder === folder.name ? styles.folderActive : styles.folderInactive}`}
-                    >
-                      <div className={styles.folderItemLeft}>
-                        <FolderOpen className={styles.iconSm} />
-                        <span className={styles.truncate}>{folder.name}</span>
-                      </div>
-                      <Badge variant="secondary" className={styles.badgeCount}>
-                        {folder.count}
-                      </Badge>
-                    </button>
-                  ))}
-                </div>
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="tags" className={styles.tabsContent}>
-              <div className={styles.tagList}>
-                {[
-                  'Frontend',
-                  'Backend',
-                  'Design',
-                  'DevOps',
-                  'Docs',
-                  'Research',
-                ].map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant="secondary"
-                    className={styles.tagBadge}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </aside>
+      {/* Pastas / Categorias */}
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '0.75rem',
+          }}
+        >
+          <h2 style={{ fontSize: '0.9375rem', fontWeight: 600, margin: 0 }}>
+            Pastas de Auditoria
+          </h2>
+          <Button
+            variant={selectedFolder === 'Todos' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setSelectedFolder('Todos')}
+          >
+            Todas as Pastas
+          </Button>
+        </div>
 
-        <div className={styles.content}>
-          <div className={styles.contentHeader}>
-            <div className={styles.mobileSearchWrapper}>
-              <Search className={styles.searchIcon} />
-              <Input
-                placeholder="Buscar arquivos..."
-                className={styles.searchInputDesktop}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className={styles.desktopSearchWrapper}>
-              <Search className={styles.searchIcon} />
-              <Input
-                placeholder="Buscar arquivos..."
-                className={styles.searchInputDesktop}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className={styles.viewToggleGroup}>
-              <Button
-                variant={view === 'grid' ? 'secondary' : 'ghost'}
-                size="icon"
-                className={styles.toggleBtnLeft}
-                onClick={() => setView('grid')}
+        <div className={styles.folderGrid}>
+          {folders.map((f) => {
+            const isSelected = selectedFolder === f.name;
+            return (
+              <Card
+                key={f.name}
+                className={`${styles.folderCard} ${isSelected ? styles.selectedRow : ''}`}
+                onClick={() => setSelectedFolder(f.name)}
+                style={{ cursor: 'pointer' }}
               >
-                <Grid3X3 className={styles.iconSm} />
-              </Button>
-              <Button
-                variant={view === 'list' ? 'secondary' : 'ghost'}
-                size="icon"
-                className={styles.toggleBtnRight}
-                onClick={() => setView('list')}
-              >
-                <List className={styles.iconSm} />
-              </Button>
-            </div>
-          </div>
-
-          {!selectedFolder && view === 'grid' && (
-            <div>
-              <h2 className={styles.sectionTitle}>Pastas</h2>
-              <div className={styles.folderGrid}>
-                {folders.map((folder) => (
-                  <button
-                    key={folder.name}
-                    type="button"
-                    onClick={() => setSelectedFolder(folder.name)}
-                    className={styles.folderCard}
-                  >
-                    <div
-                      className={`${styles.folderCardIconWrapper} ${folderThemes[folder.theme]}`}
-                    >
-                      <FolderOpen className={styles.iconBase} />
-                    </div>
-                    <div>
-                      <p className={styles.folderCardTitle}>{folder.name}</p>
-                      <p className={styles.folderCardSubtitle}>
-                        {folder.files} arquivos
-                      </p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div>
-            {selectedFolder && (
-              <div className={styles.breadcrumb}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedFolder(null)}
-                  className={styles.breadcrumbBtn}
-                >
-                  Todos
-                </Button>
-                <span className={styles.breadcrumbSeparator}>/</span>
-                <span className={styles.breadcrumbActive}>
-                  {selectedFolder}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={styles.closeBtn}
-                  onClick={() => setSelectedFolder(null)}
-                >
-                  <X className={styles.iconXs} />
-                </Button>
-              </div>
-            )}
-            <h2 className={styles.sectionTitle}>Arquivos</h2>
-            <Card>
-              <CardContent className={styles.tableCardContent}>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead className={styles.hiddenMobile}>
-                        Adicionado por
-                      </TableHead>
-                      <TableHead className={styles.hiddenMobile}>
-                        Pasta
-                      </TableHead>
-                      <TableHead className={styles.hiddenMobile}>
-                        Tamanho
-                      </TableHead>
-                      <TableHead className={styles.hiddenMobile}>
-                        Data
-                      </TableHead>
-                      <TableHead className={styles.w12} />
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredFiles.map((file) => (
-                      <TableRow key={file.id}>
-                        <TableCell>
-                          <div className={styles.tableCellContent}>
-                            {fileTypeIcons[file.type]}
-                            <span className={styles.fileName}>{file.name}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className={styles.hiddenMobile}>
-                          <div className={styles.tableCellContent}>
-                            <Avatar className={styles.avatar}>
-                              <AvatarFallback className={styles.avatarFallback}>
-                                {file.addedBy.initials}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className={styles.textXs}>
-                              {file.addedBy.name}
-                            </span>
-                          </div>
-                        </TableCell>
-                        <TableCell className={styles.hiddenMobile}>
-                          <Badge
-                            variant="secondary"
-                            className={styles.badgeNormal}
-                          >
-                            {file.folder}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className={styles.hiddenMobile}>
-                          <span className={styles.tableTextMuted}>
-                            {file.size}
-                          </span>
-                        </TableCell>
-                        <TableCell className={styles.hiddenMobile}>
-                          <span className={styles.tableTextMuted}>
-                            {file.date}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className={styles.actionBtn}
-                              >
-                                <MoreHorizontal className={styles.iconSm} />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
-                                <Eye className={styles.menuIcon} />
-                                Visualizar
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Download className={styles.menuIcon} />
-                                Download
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                className={styles.textDestructive}
-                              >
-                                <Trash2 className={styles.menuIcon} />
-                                Excluir
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
+                <CardContent className={styles.folderCardContent}>
+                  <div className={styles.folderIconWrapper}>
+                    <FolderOpen className={styles.folderIcon} />
+                  </div>
+                  <div>
+                    <h3 className={styles.folderName}>{f.name}</h3>
+                    <p className={styles.folderCount}>{f.files} arquivos</p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
+
+      {/* Barra de Busca e Visualização */}
+      <div className={styles.searchBar}>
+        <div className={styles.searchInputWrapper}>
+          <Search className={styles.searchIcon} />
+          <Input
+            placeholder="Buscar documentos por nome..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
+
+        <div className={styles.viewToggleGroup}>
+          <Button
+            variant={view === 'grid' ? 'secondary' : 'ghost'}
+            size="icon"
+            onClick={() => setView('grid')}
+            title="Visualização em Grade"
+          >
+            <Grid3X3 className={styles.btnIconMedium} />
+          </Button>
+          <Button
+            variant={view === 'list' ? 'secondary' : 'ghost'}
+            size="icon"
+            onClick={() => setView('list')}
+            title="Visualização em Lista"
+          >
+            <List className={styles.btnIconMedium} />
+          </Button>
+        </div>
+      </div>
+
+      {/* Listagem de Arquivos */}
+      {isLoading ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '3rem',
+            color: 'var(--muted-foreground)',
+          }}
+        >
+          <Loader2 className="animate-spin" size={36} />
+          <p style={{ marginTop: '0.75rem' }}>Carregando documentos...</p>
+        </div>
+      ) : documents.length === 0 ? (
+        <div
+          style={{
+            textAlign: 'center',
+            padding: '3rem',
+            color: 'var(--muted-foreground)',
+            border: '1px dashed var(--border)',
+            borderRadius: '8px',
+          }}
+        >
+          <p style={{ fontWeight: 600 }}>Nenhum documento encontrado.</p>
+          <p style={{ fontSize: '0.8125rem' }}>
+            Envie um novo laudo ou certificado pelo botão acima.
+          </p>
+        </div>
+      ) : view === 'grid' ? (
+        <div className={styles.fileGrid}>
+          {documents.map((file) => (
+            <Card key={file.id} className={styles.fileCard}>
+              <CardContent className={styles.fileCardContent}>
+                <div className={styles.fileCardHeader}>
+                  <div className={styles.fileCardIconWrapper}>
+                    {fileTypeIcons[file.type] || (
+                      <FileText className={styles.iconBlue} />
+                    )}
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className={styles.moreButton}
+                      >
+                        <MoreHorizontal className={styles.btnIconMedium} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => handleDownload(file.name)}
+                      >
+                        <Download className={styles.btnIconLeft} />
+                        Baixar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className={styles.menuItemDanger}
+                        onClick={() => handleDeleteDocument(file.id, file.name)}
+                      >
+                        <Trash2 className={styles.btnIconLeft} />
+                        Excluir
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                <p className={styles.fileName} title={file.name}>
+                  {file.name}
+                </p>
+
+                <div className={styles.fileCardMeta}>
+                  <span className={styles.fileSize}>{file.size}</span>
+                  <Badge variant="outline" className={styles.folderBadge}>
+                    {file.folder}
+                  </Badge>
+                </div>
+
+                <div className={styles.fileCardFooter}>
+                  <div className={styles.fileCardUser}>
+                    <Avatar className={styles.userAvatarSmall}>
+                      <AvatarFallback className={styles.userInitialsSmall}>
+                        {file.userName
+                          ? file.userName.slice(0, 2).toUpperCase()
+                          : 'SX'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className={styles.fileDate}>
+                      {new Date(file.createdAt).toLocaleDateString('pt-BR')}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>Pasta</TableHead>
+                <TableHead>Tamanho</TableHead>
+                <TableHead>Enviado por</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead className={styles.tableHeadActions}>Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {documents.map((file) => (
+                <TableRow key={file.id}>
+                  <TableCell className={styles.fileNameCell}>
+                    <div className={styles.fileNameInner}>
+                      {fileTypeIcons[file.type] || (
+                        <FileText className={styles.iconBlue} />
+                      )}
+                      <span className={styles.fileNameText} title={file.name}>
+                        {file.name}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className={styles.folderBadge}>
+                      {file.folder}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className={styles.fileSizeCell}>
+                    {file.size}
+                  </TableCell>
+                  <TableCell>
+                    <div className={styles.userNameInner}>
+                      <Avatar className={styles.userAvatarSmall}>
+                        <AvatarFallback className={styles.userInitialsSmall}>
+                          {file.userName
+                            ? file.userName.slice(0, 2).toUpperCase()
+                            : 'SX'}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className={styles.userNameText}>
+                        {file.userName || 'Produtor'}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell className={styles.fileDateCell}>
+                    {new Date(file.createdAt).toLocaleDateString('pt-BR')}
+                  </TableCell>
+                  <TableCell className={styles.tableCellActions}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDownload(file.name)}
+                      title="Baixar arquivo"
+                    >
+                      <Download size={16} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteDocument(file.id, file.name)}
+                      title="Excluir"
+                      style={{ color: '#ef4444' }}
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      )}
     </div>
   );
 }

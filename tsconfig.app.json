@@ -20,10 +20,12 @@
     "paths": {
       "@/*": ["./src/*"],
       "@lib/shared": [
+        "../../packages/shared/dist/index.d.ts",
         "./external_shared/dist/index.d.ts",
         "./node_modules/@lib/shared/dist/index.d.ts"
       ],
       "@lib/shared/*": [
+        "../../packages/shared/dist/*",
         "./external_shared/dist/*",
         "./node_modules/@lib/shared/dist/*"
       ],

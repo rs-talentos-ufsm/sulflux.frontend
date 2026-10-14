@@ -10,7 +10,7 @@ import {
   BreadcrumbSeparator,
 } from '../../ui/breadcrumb/breadcrumb';
 import { Button } from '../../ui/button/button';
-import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar/avatar';
+import { Avatar, AvatarFallback } from '../../ui/avatar/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,22 +22,26 @@ import {
 import styles from './AppHeader.module.css';
 import { useLogout } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/authStore';
+import { getUserAvatarInfo } from '@/utils/user';
+import GlobalSearch from '../global-search/GlobalSearch';
+import NotificationDropdown from '../notification-dropdown/NotificationDropdown';
 
-// Dicionário mapeando cada segmento isolado da URL para seu respectivo rótulo
 const routeLabels: Record<string, string> = {
   properties: 'Minhas Propriedades',
-  new: 'Nova Propriedade',
-  details: 'Detalhes da Propriedade',
-  'fields-new': 'Novo Talhão',
-  fields: 'Talhões',
-  season: 'Safra',
+  new: 'Novo Registro',
+  map: 'Mapa de Talhões',
+  carbon: 'Análise de Carbono',
+  water: 'Balanço Hídrico',
+  reports: 'Relatórios',
   documents: 'Documentos',
+  assistant: 'Assistente Sulflux',
+  season: 'Safras',
   settings: 'Configurações',
-  profile: 'Perfil',
-  account: 'Conta',
-  notifications: 'Notificações',
-  users: 'Usuários',
-  permissions: 'Permissões',
+  field: 'Talhões',
+  'field-results': 'Resultados do Talhão',
+  'new-field': 'Novo Talhão',
+  'monitoring-history': 'Histórico',
+  'search-sicar': 'Consulta SICAR',
 };
 
 export default function AppHeader() {
@@ -52,10 +56,10 @@ export default function AppHeader() {
     logout();
   };
 
-  // Separa o pathname em um array removendo barras vazias
-  // Ex: '/properties/new' -> ['properties', 'new']
   const pathSegments = pathname.split('/').filter(Boolean);
   const isRoot = pathSegments.length === 0;
+
+  const { userNamePreview, userInitials } = getUserAvatarInfo(user);
 
   return (
     <header className={styles.header}>
@@ -63,36 +67,46 @@ export default function AppHeader() {
       <Separator orientation="vertical" className={styles.separator} />
 
       <Breadcrumb className={styles.breadcrumbWrapper}>
-        <BreadcrumbList>
+        <BreadcrumbList className={styles.breadcrumbList}>
           <BreadcrumbItem>
-            <span className={styles.mutedText}>Sulflux</span>
+            <Link to="/properties" className={styles.breadcrumbLinkText}>
+              Sulflux
+            </Link>
           </BreadcrumbItem>
 
-          <BreadcrumbSeparator />
+          <BreadcrumbSeparator className={styles.breadcrumbSeparator} />
 
-          {/* Caso esteja na raiz, força a renderização de "Minhas Propriedades" */}
           {isRoot ? (
             <BreadcrumbItem>
-              <BreadcrumbPage>Boas Vindas</BreadcrumbPage>
+              <BreadcrumbPage className={styles.breadcrumbPage}>
+                Visão Geral
+              </BreadcrumbPage>
             </BreadcrumbItem>
           ) : (
-            // Itera sobre os fragmentos para construir o pão de migalhas
             pathSegments.map((segment, index) => {
               const isLast = index === pathSegments.length - 1;
               const label = routeLabels[segment] || segment;
+              const routeTo = `/${pathSegments.slice(0, index + 1).join('/')}`;
 
               return (
                 <React.Fragment key={segment}>
                   <BreadcrumbItem>
                     {isLast ? (
-                      <BreadcrumbPage>{label}</BreadcrumbPage>
+                      <BreadcrumbPage className={styles.breadcrumbPage}>
+                        {label}
+                      </BreadcrumbPage>
                     ) : (
-                      <span className={styles.mutedText}>{label}</span>
+                      <Link to={routeTo} className={styles.breadcrumbLinkText}>
+                        {label}
+                      </Link>
                     )}
                   </BreadcrumbItem>
 
-                  {/* Só renderiza o separador se não for o último item */}
-                  {!isLast && <BreadcrumbSeparator />}
+                  {!isLast && (
+                    <BreadcrumbSeparator
+                      className={styles.breadcrumbSeparator}
+                    />
+                  )}
                 </React.Fragment>
               );
             })
@@ -101,21 +115,19 @@ export default function AppHeader() {
       </Breadcrumb>
 
       <div className={styles.rightSection}>
+        {/* Barra de Busca Global Multifacetada */}
+        <GlobalSearch />
+
+        {/* Dropdown de Notificações & Eventos */}
+        <NotificationDropdown />
+
+        {/* Menu do Usuário com Avatar e Ações */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className={styles.avatarButton}>
               <Avatar className={styles.avatar}>
-                <AvatarImage
-                  src="/placeholder.svg"
-                  alt={`Foto do ${user?.name?.split(' ').slice(0, 2).join(' ') || 'Usuário'}`}
-                />
                 <AvatarFallback className={styles.avatarFallbackText}>
-                  {user?.name
-                    ?.split(' ')
-                    .slice(0, 2)
-                    .map((n) => n[0])
-                    .join('')
-                    .toUpperCase() || 'US'}
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -126,20 +138,13 @@ export default function AppHeader() {
             sideOffset={4}
           >
             <div className={styles.userInfo}>
-              <Avatar>
+              <Avatar className={styles.avatar}>
                 <AvatarFallback className={styles.avatarFallbackText}>
-                  {user?.name
-                    ?.split(' ')
-                    .slice(0, 2)
-                    .map((n) => n[0])
-                    .join('')
-                    .toUpperCase() || 'US'}
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
               <div className={styles.userTextWrapper}>
-                <span className={styles.userName}>
-                  {user?.name?.split(' ').slice(0, 2).join(' ') || 'Usuário'}
-                </span>
+                <span className={styles.userName}>{userNamePreview}</span>
                 <span className={styles.userEmail}>
                   {user?.email || 'Email não disponível'}
                 </span>
@@ -155,7 +160,7 @@ export default function AppHeader() {
               disabled={isPending}
               onClick={handleSubmit}
             >
-              {isPending ? 'Saindo...' : 'Sair'}
+              {isPending ? 'Saindo...' : 'Sair da Conta'}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -9,24 +9,69 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button/button';
 import { Input } from '@/components/ui/input/input';
+import { toast } from 'sonner';
+import api from '@/api/api';
 import styles from './SearchSicar.module.css';
+
+// Expressão regular oficial do CAR nacional no SICAR: UF-XXXXXXX-32HEX (43 caracteres)
+const CAR_REGEX = /^[A-Z]{2}-\d{7}-[A-F0-9]{32}$/;
 
 export default function SearchSicarPage() {
   const navigate = useNavigate();
   const [car, setCar] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Simula a busca no SICAR
-  function handleBuscar() {
-    if (!car.trim()) return;
+  async function handleBuscar() {
+    const trimmedCar = car.trim().toUpperCase();
+    if (!trimmedCar) {
+      toast.error('Informe o número do CAR para realizar a busca.');
+      return;
+    }
+
+    if (!CAR_REGEX.test(trimmedCar)) {
+      toast.error(
+        'Formato do CAR inválido. O padrão oficial nacional do SICAR exige 43 caracteres: UF-XXXXXXX-32HEX (ex: RS-4305108-8C646BEA3C084EEBA1C765BB8E09FA83).',
+      );
+      return;
+    }
+
     setLoading(true);
 
-    // Simula tempo de resposta da API do governo
-    setTimeout(() => {
+    try {
+      const response = await api.get('/api/properties/car/lookup', {
+        params: { car: trimmedCar },
+      });
+
+      const carData = response.data;
+      toast.success(
+        `CAR localizado com sucesso: ${carData.name} (${carData.location})`,
+      );
+
+      navigate(`/properties/new/details?car=${encodeURIComponent(trimmedCar)}`);
+    } catch (error: any) {
+      if (error?.response?.status === 409) {
+        toast.error(
+          error.response.data?.detail ||
+            'Este número de CAR já está cadastrado em outra propriedade no sistema.',
+        );
+      } else if (error?.response?.status === 400) {
+        toast.error(
+          error.response.data?.detail ||
+            'Número do CAR com formato inválido para o padrão nacional.',
+        );
+      } else if (error?.response?.status === 404) {
+        toast.error(
+          error.response.data?.detail ||
+            'CAR não localizado na base de dados do SICAR.',
+        );
+      } else {
+        toast.error(
+          'Falha ao conectar com o serviço do SICAR. Tente novamente ou use o cadastro manual.',
+        );
+      }
+    } finally {
       setLoading(false);
-      // Navega para a tela de detalhes passando o CAR via query param
-      navigate(`/properties/new/details?car=${encodeURIComponent(car)}`);
-    }, 1200);
+    }
   }
 
   return (

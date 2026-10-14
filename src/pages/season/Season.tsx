@@ -37,6 +37,10 @@ import { InsumoTags } from '@/components/utils/insumo-tags/insumo-tags';
 
 import { useProperty } from '@/hooks/useProperty';
 import { useField } from '@/hooks/useField';
+import { useSaveSeasonCycles } from '@/hooks/useCycle';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { CycleType } from '@lib/shared';
 
 import styles from './Season.module.css';
 
@@ -126,6 +130,9 @@ export default function SeasonConfigPage() {
   );
   const { data: field, isLoading: isFieldLoading } = useField(fieldId!);
 
+  const navigate = useNavigate();
+  const saveSeason = useSaveSeasonCycles();
+
   // Fases adicionais criadas pelo usuário
   const [extraPhases, setExtraPhases] = useState<number[]>([]);
   const phaseSeq = useRef(0);
@@ -139,6 +146,63 @@ export default function SeasonConfigPage() {
   function removePhase(id: number) {
     setExtraPhases((prev) => prev.filter((p) => p !== id));
   }
+
+  const handleSave = async () => {
+    if (!fieldId || !propertyId) return;
+
+    try {
+      await saveSeason.mutateAsync({
+        fieldId,
+        data: {
+          safra: '2023 / 2024',
+          cycles: [
+            {
+              tipo: CycleType.Commercial,
+              titulo: 'Cultura Comercial — Safra Verão',
+              cultura: 'Soja convencional',
+              produtividade: '68 sc/ha',
+              inicio: new Date('2023-10-15'),
+              fim: new Date('2024-03-20'),
+              inputs: [
+                {
+                  category: 'Fertilizante',
+                  product: 'NPK 04-14-08',
+                  quantity: '300 kg/ha',
+                  date: new Date('2023-10-15'),
+                },
+                {
+                  category: 'Defensivo',
+                  product: 'Inoculante Bradyrhizobium',
+                  quantity: '100 ml/saco',
+                  date: new Date('2023-10-14'),
+                },
+              ],
+            },
+            {
+              tipo: CycleType.Cover,
+              titulo: 'Cobertura Vegetal — Entressafra',
+              cultura: 'Aveia Preta + Nabo Forrageiro',
+              inicio: new Date('2024-04-05'),
+              fim: new Date('2024-09-10'),
+              inputs: [
+                {
+                  category: 'Semente',
+                  product: 'Mix Aveia + Nabo',
+                  quantity: '45 kg/ha',
+                  date: new Date('2024-04-05'),
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      toast.success('Cronograma e fases da safra salvos com sucesso!');
+      navigate(`/properties/${propertyId}/fields/${fieldId}/results`);
+    } catch {
+      toast.error('Erro ao salvar o cronograma da safra.');
+    }
+  };
 
   // Estados de Loading
   if (isPropertyLoading || isFieldLoading) {
@@ -486,7 +550,16 @@ export default function SeasonConfigPage() {
               <Button variant="ghost" asChild>
                 <Link to={`/properties/${property.id}`}>Cancelar</Link>
               </Button>
-              <Button>Salvar Cronograma</Button>
+              <Button onClick={handleSave} disabled={saveSeason.isPending}>
+                {saveSeason.isPending && (
+                  <Loader2
+                    className="animate-spin"
+                    size={16}
+                    style={{ marginRight: '6px' }}
+                  />
+                )}
+                Salvar Cronograma
+              </Button>
             </div>
           </div>
         </div>

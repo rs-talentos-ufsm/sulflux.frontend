@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import AppHeader from '../app-header/AppHeader';
 import AppSidebar from '../app-sidebar/AppSidebar';
-import AppFooter from '../app-footer/AppFooter';
 
 import styles from './AppLayout.module.css';
 import { ThemeProvider } from '../../ui/theme/theme-provider';
 import { SidebarProvider, SidebarInset } from '../../ui/sidebar/sidebar';
 import { Toaster } from '../../ui/toaster/toaster';
+import { SpeedDial } from '../speed-dial/SpeedDial';
 
 export default function AppLayout() {
   return (
@@ -20,10 +20,10 @@ export default function AppLayout() {
             <main className={styles.mainContent}>
               <Outlet />
             </main>
-            <AppFooter />
           </SidebarInset>
         </SidebarProvider>
 
+        <SpeedDial />
         <Toaster richColors position="top-right" />
       </ThemeProvider>
     </div>
