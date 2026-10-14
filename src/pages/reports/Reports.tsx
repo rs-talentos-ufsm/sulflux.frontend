@@ -11,8 +11,6 @@ import {
   Share2,
   Loader2,
 } from 'lucide-react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { Button } from '@/components/ui/button/button';
 import { toast } from 'sonner';
 
@@ -82,6 +80,14 @@ export default function ReportsPage() {
     const toastId = toast.loading('Gerando arquivo PDF...');
 
     try {
+      const [jspdfModule, html2canvasModule] = await Promise.all([
+        import('jspdf'),
+        import('html2canvas'),
+      ]);
+
+      const jsPDF = jspdfModule.jsPDF || jspdfModule.default;
+      const html2canvas = html2canvasModule.default || html2canvasModule;
+
       const canvas = await html2canvas(reportElement, {
         scale: 2,
         useCORS: true,

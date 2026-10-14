@@ -21,8 +21,9 @@ const sharedPath = fs.existsSync(
 export default defineConfig({
   plugins: [react()],
 
-  // Exclui a biblioteca compartilhada do sistema de cache agressivo do Vite
+  // Exclui a biblioteca compartilhada do cache e pré-empacota dependências complexas
   optimizeDeps: {
+    include: ['jspdf', 'html2canvas'],
     exclude: ['@lib/shared'],
   },
 
