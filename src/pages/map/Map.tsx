@@ -3,31 +3,13 @@ import { Link } from 'react-router-dom';
 import { Map as MapIcon, Search, ArrowUpRight, Loader2 } from 'lucide-react';
 import { useProperties } from '@/hooks/useProperty';
 import { useMapExplorer } from '@/hooks/useMonitoring';
+import { PropertyMap } from '@/components/map/PropertyMap';
 import { Input } from '@/components/ui/input/input';
 import { Button } from '@/components/ui/button/button';
 
 import styles from './Map.module.css';
 
-const LAYER_CONFIG = {
-  Satélite: { fill: 'rgba(245, 158, 11, 0.25)', stroke: '#f59e0b' },
-  NDVI: { fill: 'rgba(16, 185, 129, 0.35)', stroke: '#10b981' },
-  Solo: { fill: 'rgba(180, 120, 70, 0.35)', stroke: '#b4784a' },
-};
-
-type LayerType = 'Satélite' | 'NDVI' | 'Solo';
-
-// Polígonos SVG padrão para talhões quando não possuem polígono GeoJSON específico
-const DEFAULT_SHAPES = [
-  '70,50 180,40 210,120 150,190 60,160',
-  '220,45 320,55 340,130 250,150 215,95',
-  '250,165 345,150 360,230 270,255',
-  '60,60 200,45 230,150 120,210 55,150',
-  '240,60 350,70 345,200 250,190',
-  '80,55 320,50 340,220 90,240',
-];
-
 export default function MapPage() {
-  const [selectedLayer, setSelectedLayer] = useState<LayerType>('Satélite');
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('');
   const [selectedTalhaoId, setSelectedTalhaoId] = useState<string>('');
   const [search, setSearch] = useState('');
@@ -39,6 +21,7 @@ export default function MapPage() {
   const allTalhoes = mapData?.talhoes || [];
 
   const effectivePropertyId = selectedPropertyId || properties[0]?.id;
+  const currentProperty = properties.find((p) => p.id === effectivePropertyId);
 
   const propertyTalhoes = useMemo(() => {
     return allTalhoes.filter((t) => {
@@ -56,8 +39,6 @@ export default function MapPage() {
   const activeTalhao =
     propertyTalhoes.find((t) => t.id === selectedTalhaoId) ||
     propertyTalhoes[0];
-
-  const currentLayerStyle = LAYER_CONFIG[selectedLayer];
 
   return (
     <div className={styles.container}>
@@ -163,125 +144,113 @@ export default function MapPage() {
             </div>
           </div>
 
-          {/* Área do Mapa */}
-          <div className={styles.mapViewportCard}>
-            {/* Controles de Camadas */}
-            <div className={styles.mapControls}>
-              {(['Satélite', 'NDVI', 'Solo'] as const).map((layer) => (
-                <button
-                  key={layer}
-                  type="button"
-                  className={`${styles.layerButton} ${selectedLayer === layer ? styles.layerButtonActive : ''}`}
-                  onClick={() => setSelectedLayer(layer)}
-                >
-                  {layer}
-                </button>
-              ))}
-            </div>
+          {/* Área do Mapa com PropertyMap Satélite */}
+          <div
+            className={styles.mapViewportCard}
+            style={{ padding: 0, overflow: 'hidden', position: 'relative' }}
+          >
+            <PropertyMap
+              title={
+                currentProperty
+                  ? `Mapa Espacial · ${currentProperty.name}`
+                  : 'Mapa de Propriedades e Talhões'
+              }
+              subtitle={
+                currentProperty
+                  ? `${currentProperty.location} · ${propertyTalhoes.length} talhão(ões) mapeado(s)`
+                  : 'Selecione uma propriedade para visualizar o perímetro e os talhões no satélite.'
+              }
+              polygon={currentProperty?.coordinates as any}
+              polygonColor="#22c55e"
+              initialCenter={
+                currentProperty?.coordinates &&
+                Array.isArray(currentProperty.coordinates) &&
+                currentProperty.coordinates.length > 0
+                  ? [
+                      currentProperty.coordinates[0].lng,
+                      currentProperty.coordinates[0].lat,
+                    ]
+                  : undefined
+              }
+              markers={propertyTalhoes
+                .filter(
+                  (t: any) =>
+                    t.coordinates &&
+                    (Array.isArray(t.coordinates) ||
+                      (t.coordinates.lat && t.coordinates.lng)),
+                )
+                .map((t: any) => ({
+                  id: t.id,
+                  name: t.name,
+                  location: t.code,
+                  area: t.area,
+                  status: t.status,
+                  coordinates: Array.isArray(t.coordinates)
+                    ? [t.coordinates[0].lng, t.coordinates[0].lat]
+                    : [t.coordinates.lng, t.coordinates.lat],
+                }))}
+              selectedMarkerId={activeTalhao?.id}
+              onSelectMarker={(item) => setSelectedTalhaoId(item.id)}
+              height="620px"
+            />
 
-            {/* Container Gráfico do Mapa SVG */}
-            <div className={styles.svgMapContainer}>
-              <svg viewBox="0 0 400 300" className={styles.svgMap}>
-                <defs>
-                  <pattern
-                    id="satelliteGrid"
-                    width="20"
-                    height="20"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <path
-                      d="M 20 0 L 0 0 0 20"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="1"
-                    />
-                  </pattern>
-                </defs>
+            {/* Card Flutuante de Detalhes do Talhão Ativo */}
+            {activeTalhao && (
+              <div className={styles.selectedTalhaoFloatingCard}>
+                <div className={styles.cardTopRow}>
+                  <div>
+                    <h4 style={{ fontWeight: 700, fontSize: '0.9375rem' }}>
+                      {activeTalhao.name}
+                    </h4>
+                    <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                      {activeTalhao.code} · {activeTalhao.propertyName}
+                    </p>
+                  </div>
+                  <span className={styles.badgeReady}>
+                    {activeTalhao.status}
+                  </span>
+                </div>
 
-                <rect width="400" height="300" fill="url(#satelliteGrid)" />
-
-                {/* Renderização dos Talhões */}
-                {propertyTalhoes.map((t, idx) => {
-                  const points = DEFAULT_SHAPES[idx % DEFAULT_SHAPES.length];
-                  const isSelected = activeTalhao?.id === t.id;
-
-                  return (
-                    <polygon
-                      key={t.id}
-                      points={points}
-                      className={styles.talhaoPolygon}
-                      fill={
-                        isSelected
-                          ? currentLayerStyle.fill
-                          : 'rgba(255, 255, 255, 0.08)'
-                      }
-                      stroke={isSelected ? currentLayerStyle.stroke : '#64748b'}
-                      strokeWidth={isSelected ? 3 : 1.5}
-                      strokeDasharray={isSelected ? undefined : '4 2'}
-                      onClick={() => setSelectedTalhaoId(t.id)}
-                    />
-                  );
-                })}
-              </svg>
-
-              {/* Card Flutuante de Detalhes do Talhão Ativo */}
-              {activeTalhao && (
-                <div className={styles.selectedTalhaoFloatingCard}>
-                  <div className={styles.cardTopRow}>
-                    <div>
-                      <h4 style={{ fontWeight: 700, fontSize: '0.9375rem' }}>
-                        {activeTalhao.name}
-                      </h4>
-                      <p style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                        {activeTalhao.code} · {activeTalhao.propertyName}
-                      </p>
-                    </div>
-                    <span className={styles.badgeReady}>
-                      {activeTalhao.status}
+                <div className={styles.metaGrid}>
+                  <div>
+                    <span className={styles.metaItemTitle}>Área</span>
+                    <span className={styles.metaItemValue}>
+                      {activeTalhao.area
+                        ? `${activeTalhao.area.toFixed(1)} ha`
+                        : '-- ha'}
                     </span>
                   </div>
-
-                  <div className={styles.metaGrid}>
-                    <div>
-                      <span className={styles.metaItemTitle}>Área</span>
-                      <span className={styles.metaItemValue}>
-                        {activeTalhao.area
-                          ? `${activeTalhao.area.toFixed(1)} ha`
-                          : '-- ha'}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles.metaItemTitle}>Solo</span>
-                      <span className={styles.metaItemValue}>
-                        {activeTalhao.soilType || 'Latossolo'}
-                      </span>
-                    </div>
-                    <div>
-                      <span className={styles.metaItemTitle}>Balanço C</span>
-                      <span
-                        className={styles.metaItemValue}
-                        style={{ color: '#34d399' }}
-                      >
-                        {activeTalhao.carbonBalance}
-                      </span>
-                    </div>
+                  <div>
+                    <span className={styles.metaItemTitle}>Solo</span>
+                    <span className={styles.metaItemValue}>
+                      {activeTalhao.soilType || 'Latossolo'}
+                    </span>
                   </div>
-
-                  <Button
-                    asChild
-                    size="sm"
-                    style={{ width: '100%', marginTop: '4px' }}
-                  >
-                    <Link
-                      to={`/properties/${activeTalhao.propertyId}/fields/${activeTalhao.id}/results`}
+                  <div>
+                    <span className={styles.metaItemTitle}>Balanço C</span>
+                    <span
+                      className={styles.metaItemValue}
+                      style={{ color: '#34d399' }}
                     >
-                      Ver Resultados do Talhão
-                      <ArrowUpRight size={14} style={{ marginLeft: '6px' }} />
-                    </Link>
-                  </Button>
+                      {activeTalhao.carbonBalance}
+                    </span>
+                  </div>
                 </div>
-              )}
-            </div>
+
+                <Button
+                  asChild
+                  size="sm"
+                  style={{ width: '100%', marginTop: '4px' }}
+                >
+                  <Link
+                    to={`/properties/${activeTalhao.propertyId}/fields/${activeTalhao.id}/results`}
+                  >
+                    Ver Resultados do Talhão
+                    <ArrowUpRight size={14} style={{ marginLeft: '6px' }} />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

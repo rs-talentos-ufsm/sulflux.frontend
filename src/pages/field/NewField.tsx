@@ -1,21 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import {
-  Pencil,
-  Undo2,
-  Trash2,
-  Ruler,
-  Spline,
-  MousePointerClick,
-  Check,
-  Info,
-  Layers,
-  Loader2,
-} from 'lucide-react';
+import { Ruler, Spline, Check, Info, Layers, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button/button';
 import { Input } from '@/components/ui/input/input';
 import { Label } from '@/components/ui/label/label';
+import { PropertyMap } from '@/components/map/PropertyMap';
 import {
   Select,
   SelectContent,
@@ -39,18 +29,27 @@ const soils = [
   'Cambissolo',
 ];
 
-// Vértices do polígono desenhado (coordenadas no viewBox 0 0 400 300)
-const drawnPoints = [
-  { x: 90, y: 70 },
-  { x: 300, y: 55 },
-  { x: 345, y: 160 },
-  { x: 250, y: 245 },
-  { x: 105, y: 215 },
-];
+function calculateAreaHa(vertices: [number, number][]): number {
+  if (vertices.length < 3) return 0;
+  const avgLat = vertices.reduce((sum, v) => sum + v[1], 0) / vertices.length;
+  const latRad = (avgLat * Math.PI) / 180;
+  const metersPerDegLat = 111320;
+  const metersPerDegLng = 111320 * Math.cos(latRad);
+
+  let areaSqMeters = 0;
+  for (let i = 0; i < vertices.length; i++) {
+    const j = (i + 1) % vertices.length;
+    const xi = vertices[i][0] * metersPerDegLng;
+    const yi = vertices[i][1] * metersPerDegLat;
+    const xj = vertices[j][0] * metersPerDegLng;
+    const yj = vertices[j][1] * metersPerDegLat;
+    areaSqMeters += xi * yj - xj * yi;
+  }
+  return Math.abs(areaSqMeters / 2) / 10000;
+}
 
 export default function NewFieldPage() {
   const { id } = useParams<{ id: string }>();
-  console.log('propertyId', id);
   const navigate = useNavigate();
 
   // Hooks da API
@@ -58,34 +57,38 @@ export default function NewFieldPage() {
   const { mutateAsync: createField, isPending } = useCreateField();
 
   // Estados locais
-  const [drawing, setDrawing] = useState(false);
-  const [vertices, setVertices] = useState(0);
-
   const [name, setName] = useState('');
   const [soilType, setSoilType] = useState(soils[0]);
+  const [drawnVertices, setDrawnVertices] = useState<Array<[number, number]>>(
+    [],
+  );
 
-  // Lógica de simulação de desenho
-  const done = vertices >= drawnPoints.length;
-  const visible = drawnPoints.slice(0, vertices);
-  const polyPoints = visible.map((p) => `${p.x},${p.y}`).join(' ');
+  const initialCenter = useMemo<[number, number] | undefined>(() => {
+    if (
+      property?.coordinates &&
+      Array.isArray(property.coordinates) &&
+      property.coordinates.length > 0
+    ) {
+      const first = property.coordinates[0];
+      return [first.lng, first.lat];
+    }
+    return undefined;
+  }, [property?.coordinates]);
 
-  function addVertex() {
-    if (!drawing) setDrawing(true);
-    setVertices((v) => Math.min(v + 1, drawnPoints.length));
-  }
-
-  function reset() {
-    setVertices(0);
-    setDrawing(false);
-  }
+  const calculatedAreaHa = useMemo(
+    () => calculateAreaHa(drawnVertices),
+    [drawnVertices],
+  );
 
   async function handleSaveField() {
     if (!name.trim()) {
       toast.error('Por favor, preencha o nome do talhão.');
       return;
     }
-    if (visible.length < 3) {
-      toast.error('O talhão precisa ter pelo menos 3 vértices.');
+    if (drawnVertices.length < 3) {
+      toast.error(
+        'O talhão precisa ter pelo menos 3 vértices marcados no mapa.',
+      );
       return;
     }
 
@@ -93,7 +96,7 @@ export default function NewFieldPage() {
       name: name.trim(),
       soilType: soilType,
       propertyId: id!,
-      coordinates: visible, // Envia as coordenadas para o backend calcular a área e perímetro
+      coordinates: drawnVertices.map(([lng, lat]) => ({ x: lng, y: lat })),
     };
 
     try {
@@ -105,17 +108,10 @@ export default function NewFieldPage() {
     }
   }
 
-  // Medidas estimadas apenas para visualização no front (Backend calcula o valor oficial real)
-  const estimatedArea = done
-    ? '112 ha'
-    : vertices > 0
-      ? `${vertices * 22} ha`
-      : '—';
-  const estimatedPerimeter = done
-    ? '4,05 km'
-    : vertices > 0
-      ? `${(vertices * 0.8).toFixed(2)} km`
-      : '—';
+  const estimatedArea =
+    drawnVertices.length >= 3 ? `${calculatedAreaHa.toFixed(2)} ha` : '—';
+  const estimatedPerimeter =
+    drawnVertices.length >= 2 ? `${drawnVertices.length} vértices` : '—';
 
   if (isPropertyLoading) {
     return (
@@ -142,97 +138,26 @@ export default function NewFieldPage() {
       <div className={styles.header}>
         <h1 className={styles.title}>Desenhar Novo Talhão</h1>
         <p className={styles.subtitle}>
-          Delimite a área do talhão diretamente sobre o mapa de satélite. O
-          código, a área e o perímetro serão gerados automaticamente ao salvar.
+          Delimite a área do talhão diretamente sobre a imagem de satélite da
+          propriedade <strong>{property.name}</strong>. A área e o perímetro são
+          calculados automaticamente.
         </p>
       </div>
 
       <div className={styles.gridContainer}>
-        {/* Mapa de desenho */}
-        <div className={styles.mapCard}>
-          {/* Barra de ferramentas */}
-          <div className={styles.mapToolbar}>
-            <Button
-              size="sm"
-              variant={drawing ? 'default' : 'secondary'}
-              onClick={() => setDrawing(true)}
-            >
-              <Pencil size={16} style={{ marginRight: '6px' }} />
-              Desenhar
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setVertices((v) => Math.max(v - 1, 0))}
-              disabled={vertices === 0}
-            >
-              <Undo2 size={16} style={{ marginRight: '6px' }} />
-              Desfazer
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={reset}
-              disabled={vertices === 0}
-            >
-              <Trash2 size={16} style={{ marginRight: '6px' }} />
-              Limpar
-            </Button>
-            <span className={styles.vertexCount}>
-              <MousePointerClick size={14} />
-              {vertices} vértice(s)
-            </span>
-          </div>
-
-          {/* Área do mapa */}
-          <button
-            type="button"
-            onClick={addVertex}
-            aria-label="Adicionar vértice ao talhão"
-            className={styles.mapArea}
-          >
-            <span aria-hidden className={styles.mapGradient} />
-            <span aria-hidden className={styles.mapGrid} />
-
-            <svg
-              className={styles.svgOverlay}
-              viewBox="0 0 400 300"
-              preserveAspectRatio="xMidYMid slice"
-              aria-hidden
-            >
-              {visible.length >= 2 && (
-                <polygon
-                  points={polyPoints}
-                  fill="hsl(var(--primary))"
-                  fillOpacity={done ? 0.18 : 0.1}
-                  stroke="hsl(var(--primary))"
-                  strokeWidth="2.5"
-                  strokeDasharray={done ? undefined : '8 5'}
-                />
-              )}
-              {visible.map((p, i) => (
-                <circle
-                  key={i}
-                  cx={p.x}
-                  cy={p.y}
-                  r="5"
-                  fill="hsl(var(--primary))"
-                  stroke="white"
-                  strokeWidth="2"
-                />
-              ))}
-            </svg>
-
-            {vertices === 0 && (
-              <span className={styles.mapHint}>
-                <MousePointerClick
-                  size={16}
-                  style={{ color: 'var(--primary)' }}
-                />
-                Clique no mapa para marcar os vértices
-              </span>
-            )}
-          </button>
+        {/* Mapa interativo de satélite com desenho de talhão */}
+        <div style={{ flex: 1, minWidth: '320px' }}>
+          <PropertyMap
+            mode="draw-polygon"
+            title={`Demarcação de Talhão · ${property.name}`}
+            subtitle="Clique no mapa de satélite para adicionar os vértices do perímetro do talhão."
+            initialCenter={initialCenter}
+            polygon={property.coordinates as any}
+            polygonColor="#22c55e"
+            drawnVertices={drawnVertices}
+            onDrawnVerticesChange={setDrawnVertices}
+            height="500px"
+          />
         </div>
 
         {/* Formulário lateral */}
@@ -304,9 +229,9 @@ export default function NewFieldPage() {
                   color: 'var(--primary)',
                 }}
               />
-              {done
-                ? 'Polígono fechado. Revise os dados e salve o talhão. O backend irá calcular a área exata.'
-                : 'Continue marcando vértices até fechar o contorno da área.'}
+              {drawnVertices.length >= 3
+                ? 'Polígono demarcado. Revise os dados e salve o talhão. O backend irá calcular a área e perímetro oficiais.'
+                : 'Clique no mapa para marcar pelo menos 3 vértices delimitando o talhão.'}
             </p>
           </div>
 
@@ -321,7 +246,7 @@ export default function NewFieldPage() {
             </Button>
             <Button
               className={styles.btnFlex}
-              disabled={!done || isPending}
+              disabled={drawnVertices.length < 3 || isPending}
               onClick={handleSaveField}
             >
               {isPending ? (

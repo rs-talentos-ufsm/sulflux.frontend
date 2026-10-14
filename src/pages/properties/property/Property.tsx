@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   MapPin,
@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button/button';
-import { MapPlaceholder } from '@/components/utils/map-placeholder/map-placeholder';
+import { PropertyMap } from '@/components/map/PropertyMap';
 import { FieldCard } from '@/components/cards/field-card/field-card';
 
 // Hooks da API
@@ -32,39 +32,6 @@ export default function PropertyPage() {
   });
 
   const fields = fieldsData?.data || [];
-
-  const svgPolygonPoints = useMemo(() => {
-    const coords = property?.coordinates;
-    if (!coords || !Array.isArray(coords) || coords.length < 3)
-      return undefined;
-
-    const lats = coords.map((c: any) => c.lat);
-    const lngs = coords.map((c: any) => c.lng);
-
-    const minLat = Math.min(...lats);
-    const maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs);
-    const maxLng = Math.max(...lngs);
-
-    const latSpan = maxLat - minLat || 0.001;
-    const lngSpan = maxLng - minLng || 0.001;
-
-    const width = 360;
-    const height = 260;
-    const padding = 30;
-
-    return coords
-      .map((c: any) => {
-        const x = Math.round(
-          padding + ((c.lng - minLng) / lngSpan) * (width - 2 * padding),
-        );
-        const y = Math.round(
-          padding + ((maxLat - c.lat) / latSpan) * (height - 2 * padding),
-        );
-        return `${x},${y}`;
-      })
-      .join(' ');
-  }, [property?.coordinates]);
 
   const counts = {
     total: fields.length,
@@ -160,17 +127,27 @@ export default function PropertyPage() {
           </div>
         </div>
 
-        {/* Mapa da propriedade */}
-        <MapPlaceholder
-          outline="primary"
-          label={
-            property.area
-              ? `Perímetro da Propriedade (${property.area.toLocaleString('pt-BR')} ha)`
-              : 'Contorno da Propriedade'
-          }
-          polygonPoints={svgPolygonPoints}
-          style={{ minHeight: '220px' }}
-        />
+        {/* Mapa da propriedade com Visão de Satélite */}
+        <div style={{ flex: 1, minWidth: '320px' }}>
+          <PropertyMap
+            title={`Perímetro e Satélite · ${property.name}`}
+            subtitle={
+              property.area
+                ? `Área: ${property.area.toLocaleString('pt-BR')} ha · ${property.location}`
+                : property.location
+            }
+            polygon={property.coordinates as any}
+            polygonColor="#22c55e"
+            initialCenter={
+              property.coordinates &&
+              Array.isArray(property.coordinates) &&
+              property.coordinates.length > 0
+                ? [property.coordinates[0].lng, property.coordinates[0].lat]
+                : undefined
+            }
+            height="320px"
+          />
+        </div>
       </div>
 
       {/* Talhões */}

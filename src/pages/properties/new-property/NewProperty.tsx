@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   MapPin,
@@ -14,7 +14,7 @@ import {
 
 import { Button } from '@/components/ui/button/button';
 import { Input } from '@/components/ui/input/input';
-import { MapPlaceholder } from '@/components/utils/map-placeholder/map-placeholder';
+import { PropertyMap } from '@/components/map/PropertyMap';
 import { UploadDialog } from '@/components/dialogs/upload-dialog/upload-dialog';
 import { toast } from 'sonner';
 
@@ -51,6 +51,9 @@ export default function NewPropertyPage() {
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [car, setCar] = useState(carFromUrl || '');
+  const [pickedCoords, setPickedCoords] = useState<[number, number] | null>(
+    null,
+  );
 
   const [cover, setCover] = useState('satelite');
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -62,47 +65,26 @@ export default function NewPropertyPage() {
       setName(carData.name);
       setLocation(carData.location);
       setCar(carData.car);
+      if (carData.coordinates && carData.coordinates.length > 0) {
+        setPickedCoords([
+          carData.coordinates[0].lng,
+          carData.coordinates[0].lat,
+        ]);
+      }
     }
   }, [carData]);
-
-  // Transforma as coordenadas reais do CAR em pontos SVG para o preview visual
-  const svgPolygonPoints = useMemo(() => {
-    const coords = carData?.coordinates;
-    if (!coords || coords.length < 3) return undefined;
-
-    const lats = coords.map((c) => c.lat);
-    const lngs = coords.map((c) => c.lng);
-
-    const minLat = Math.min(...lats);
-    const maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs);
-    const maxLng = Math.max(...lngs);
-
-    const latSpan = maxLat - minLat || 0.001;
-    const lngSpan = maxLng - minLng || 0.001;
-
-    const width = 360;
-    const height = 260;
-    const padding = 30;
-
-    return coords
-      .map((c) => {
-        const x = Math.round(
-          padding + ((c.lng - minLng) / lngSpan) * (width - 2 * padding),
-        );
-        const y = Math.round(
-          padding + ((maxLat - c.lat) / latSpan) * (height - 2 * padding),
-        );
-        return `${x},${y}`;
-      })
-      .join(' ');
-  }, [carData?.coordinates]);
 
   async function handleCadastrar() {
     if (!name.trim() || !location.trim()) {
       toast.error('Preencha todos os campos obrigatórios.');
       return;
     }
+
+    const coordsToSave = carData?.coordinates
+      ? carData.coordinates
+      : pickedCoords
+        ? [{ lat: pickedCoords[1], lng: pickedCoords[0] }]
+        : undefined;
 
     const propertyData: CreatePropertyDTO = {
       name: name.trim(),
@@ -111,7 +93,7 @@ export default function NewPropertyPage() {
       area: carData?.area,
       fiscalModules: carData?.fiscalModules,
       ownerName: carData?.ownerName || undefined,
-      coordinates: carData?.coordinates,
+      coordinates: coordsToSave,
     };
 
     try {
@@ -327,18 +309,22 @@ export default function NewPropertyPage() {
 
         {/* Coluna Direita: Mapa e Ações */}
         <div className={styles.rightColumn}>
-          <MapPlaceholder
-            outline="primary"
-            label={
-              cover === 'custom' && customPhoto
-                ? 'Imagem de Drone Personalizada'
-                : isSicar
-                  ? `Perímetro do imóvel (${carData?.area?.toLocaleString('pt-BR') || '--'} ha)`
-                  : 'Visualização de Satélite'
+          <PropertyMap
+            mode={isSicar ? 'view' : 'picker'}
+            title={
+              isSicar
+                ? `Demarcação do Imóvel (${carData?.name || name || 'CAR'})`
+                : 'Localização da Sede no Mapa'
             }
-            imageUrl={cover === 'custom' ? customPhoto : null}
-            polygonPoints={svgPolygonPoints}
-            style={{ minHeight: '260px', flex: 1 }}
+            subtitle={
+              isSicar
+                ? `Perímetro oficial do SICAR · ${carData?.area?.toLocaleString('pt-BR') || '--'} ha`
+                : 'Clique no mapa ou busque sua cidade para fixar a sede da propriedade.'
+            }
+            polygon={carData?.coordinates}
+            pickedLocation={pickedCoords}
+            onPickLocation={(coords) => setPickedCoords(coords)}
+            height="380px"
           />
           <div className={styles.actionsRow}>
             <Button
