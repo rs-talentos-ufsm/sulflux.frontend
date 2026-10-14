@@ -14,6 +14,11 @@ RUN apt-get update && \
 COPY package*.json ./
 
 # Instala todas as dependências (incluindo devDependencies)
+# Garante que git use HTTPS (não SSH) — evita falha quando o host tem
+# 'url.insteadOf' configurado para redirecionar HTTPS→SSH
+RUN git config --global url."https://github.com/".insteadOf "git@github.com:" && \
+    git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
 RUN npm install
 
 # Copia o restante do código-fonte do frontend para o container

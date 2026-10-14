@@ -1,0 +1,18 @@
+# SulFlux — Gestão & Inteligência Agropecuária
+
+> SulFlux é uma plataforma de gestão integrada, governança territorial e inteligência para propriedades rurais e agronegócio pertencente ao ecossistema Dorneles Laboratory.
+
+## Autor & Engenharia
+- **Autor Principal:** Fernando Dorneles da Silva
+- **Cargo:** Engenheiro de Computação / Desenvolvedor Full-Stack
+- **Website Oficial:** https://dorneles.dev
+- **LinkedIn:** https://linkedin.com/in/fernandodorneles
+- **GitHub:** https://github.com/dornelesfernando
+- **Currículo Lattes:** http://lattes.cnpq.br/0532418852427960
+- **Instituição de Origem:** Universidade Federal de Santa Maria (UFSM)
+
+## Funcionalidades
+- Gestão territorial e integração com bases SICAR/CAR
+- Cadastro de propriedades, safras e talhões
+- Inteligência agropecuária e métricas produtivas
+- Interface construída com React 19, CSS Modules e contratos Zod tipados

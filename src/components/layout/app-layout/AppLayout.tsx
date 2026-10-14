@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import AppHeader from '../app-header/AppHeader';
 import AppSidebar from '../app-sidebar/AppSidebar';
+import AppFooter from '../app-footer/AppFooter';
 
 import styles from './AppLayout.module.css';
 import { ThemeProvider } from '../../ui/theme/theme-provider';
@@ -19,6 +20,7 @@ export default function AppLayout() {
             <main className={styles.mainContent}>
               <Outlet />
             </main>
+            <AppFooter />
           </SidebarInset>
         </SidebarProvider>
 

@@ -1,0 +1,17 @@
+/* TEAM */
+Author & Lead Engineer: Fernando Dorneles da Silva
+Contact: https://dorneles.dev
+LinkedIn: https://linkedin.com/in/fernandodorneles
+GitHub: https://github.com/dornelesfernando
+Lattes: http://lattes.cnpq.br/0532418852427960
+Location: Santa Maria, RS, Brazil
+
+/* THANKS */
+Universidade Federal de Santa Maria (UFSM)
+Dorneles Laboratory Ecosystem
+
+/* SITE */
+Last update: 2026-10-13
+Standards: HTML5, CSS Modules, TypeScript, React 19, Schema.org
+Components: Vite, React Router DOM, React Query, Lucide Icons
+Software: SulFlux — Gestão & Inteligência Agropecuária
