@@ -1,9 +1,33 @@
 import axios from 'axios';
 
+const getBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (
+    typeof window !== 'undefined' &&
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1'
+  ) {
+    if (
+      envUrl &&
+      !envUrl.includes('localhost') &&
+      !envUrl.includes('127.0.0.1')
+    ) {
+      return envUrl.endsWith('/api')
+        ? envUrl
+        : `${envUrl.replace(/\/+$/, '')}/api`;
+    }
+    return 'https://api-sulflux.dorneles.dev/api';
+  }
+  const fallback =
+    envUrl ||
+    `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 5001}/api`;
+  return fallback.endsWith('/api')
+    ? fallback
+    : `${fallback.replace(/\/+$/, '')}/api`;
+};
+
 const api = axios.create({
-  baseURL:
-    import.meta.env.VITE_API_URL ||
-    `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 5001}/api`,
+  baseURL: getBaseUrl(),
   withCredentials: true,
 });
 
