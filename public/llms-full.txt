@@ -1,0 +1,14 @@
+# SulFlux — Gestão Territorial & Inteligência Agropecuária
+
+## 1. Visão Geral
+SulFlux é uma plataforma de gestão integrada, governança territorial e inteligência agronômica voltada à administração de propriedades rurais, monitoramento de safras, recursos hídricos e balanço de carbono.
+
+- URL: https://sulflux.dorneles.dev
+- Arquiteto Responsável: Fernando Dorneles da Silva (Dorneles Laboratory)
+- Stack: React 19, TypeScript estrito, CSS Modules, Prisma ORM 7, PostgreSQL
+
+## 2. Módulos Principais
+- Gestão cadastral de fazendas e conformidade ambiental (CAR / SICAR).
+- Zoneamento de talhões com medição de áreas e mapeamento de fertilidade.
+- Acompanhamento de ciclos de safra, insumos e estimativas de produtividade.
+- Balanço hídrico e telemetria de estações agroclimáticas.

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /auth
+Disallow: /admin
+Disallow: /api/
 
 Sitemap: https://sulflux.dorneles.dev/sitemap.xml

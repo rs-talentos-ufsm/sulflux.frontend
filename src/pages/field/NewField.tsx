@@ -1,6 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Ruler, Spline, Check, Info, Layers, Loader2 } from 'lucide-react';
+import {
+  Ruler,
+  Spline,
+  Check,
+  Info,
+  Layers,
+  Loader2,
+  FileUp,
+  DownloadCloud,
+} from 'lucide-react';
 
 import { Button } from '@/components/ui/button/button';
 import { Input } from '@/components/ui/input/input';
@@ -15,9 +24,10 @@ import {
 } from '@/components/ui/select/select';
 import { toast } from 'sonner';
 
+import api from '@/api/api';
 import { useProperty } from '@/hooks/useProperty';
 import { useCreateField } from '@/hooks/useField';
-import type { CreateFieldDTO } from '@lib/shared';
+import type { CreateFieldDTO, ShapefileImportResponseDTO } from '@lib/shared';
 
 import styles from './NewField.module.css';
 
@@ -62,8 +72,13 @@ export default function NewFieldPage() {
   const [drawnVertices, setDrawnVertices] = useState<Array<[number, number]>>(
     [],
   );
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const initialCenter = useMemo<[number, number] | undefined>(() => {
+    if (drawnVertices.length > 0) {
+      return drawnVertices[0];
+    }
     if (
       property?.coordinates &&
       Array.isArray(property.coordinates) &&
@@ -73,12 +88,129 @@ export default function NewFieldPage() {
       return [first.lng, first.lat];
     }
     return undefined;
-  }, [property?.coordinates]);
+  }, [property?.coordinates, drawnVertices]);
 
   const calculatedAreaHa = useMemo(
     () => calculateAreaHa(drawnVertices),
     [drawnVertices],
   );
+
+  // Importação de arquivo Shapefile (.zip) via API ou GeoJSON local
+  async function handleFileImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    try {
+      let foundCoords: Array<[number, number]> = [];
+      let foundName = '';
+
+      if (file.name.endsWith('.zip')) {
+        // Converte o arquivo para Base64 e processa com a API do backend
+        const reader = new FileReader();
+        const base64Promise = new Promise<string>((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (err) => reject(err);
+        });
+        reader.readAsDataURL(file);
+
+        const base64Data = await base64Promise;
+
+        const { data } = await api.post<ShapefileImportResponseDTO>(
+          '/gis/import-shapefile',
+          {
+            fileBase64: base64Data,
+            fileName: file.name,
+          },
+        );
+
+        if (data.features && data.features.length > 0) {
+          const firstFeature = data.features[0];
+          foundCoords = firstFeature.coordinates.map((pt) => [pt.lng, pt.lat]);
+          foundName = firstFeature.name;
+        }
+      } else if (
+        file.name.endsWith('.geojson') ||
+        file.name.endsWith('.json')
+      ) {
+        const text = await file.text();
+        const geojson = JSON.parse(text);
+        const featureCollections: any[] = Array.isArray(geojson)
+          ? geojson
+          : [geojson];
+
+        for (const fc of featureCollections) {
+          if (!fc?.features) continue;
+          for (const f of fc.features) {
+            if (!f.geometry) continue;
+
+            if (f.geometry.type === 'Polygon') {
+              const ring = f.geometry.coordinates[0];
+              if (ring && ring.length >= 3) {
+                foundCoords = ring.map(([lng, lat]: [number, number]) => [
+                  lng,
+                  lat,
+                ]);
+                foundName =
+                  f.properties?.NOME ||
+                  f.properties?.TALHAO ||
+                  f.properties?.Nome ||
+                  f.properties?.name ||
+                  file.name.replace(/\.[^/.]+$/, '');
+                break;
+              }
+            } else if (f.geometry.type === 'MultiPolygon') {
+              const poly = f.geometry.coordinates[0];
+              const ring = poly ? poly[0] : null;
+              if (ring && ring.length >= 3) {
+                foundCoords = ring.map(([lng, lat]: [number, number]) => [
+                  lng,
+                  lat,
+                ]);
+                foundName =
+                  f.properties?.NOME ||
+                  f.properties?.TALHAO ||
+                  f.properties?.Nome ||
+                  f.properties?.name ||
+                  file.name.replace(/\.[^/.]+$/, '');
+                break;
+              }
+            }
+          }
+          if (foundCoords.length > 0) break;
+        }
+      } else {
+        toast.error(
+          'Formato não suportado. Envie um arquivo .zip (Shapefile) ou .geojson',
+        );
+        setIsImporting(false);
+        return;
+      }
+
+      if (foundCoords.length >= 3) {
+        setDrawnVertices(foundCoords);
+        if (foundName && !name) {
+          setName(foundName);
+        }
+        toast.success(
+          `Shapefile importado com sucesso! ${foundCoords.length} vértices carregados.`,
+        );
+      } else {
+        toast.warning(
+          'Nenhum polígono válido foi identificado no arquivo Shapefile fornecido.',
+        );
+      }
+    } catch (err: any) {
+      toast.error(
+        `Erro ao processar Shapefile: ${err?.response?.data?.detail || err?.message || 'Arquivo inválido.'}`,
+      );
+    } finally {
+      setIsImporting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  }
 
   async function handleSaveField() {
     if (!name.trim()) {
@@ -103,7 +235,7 @@ export default function NewFieldPage() {
       await createField(fieldData);
       toast.success('Talhão criado com sucesso!');
       navigate(`/properties/${id}`);
-    } catch (error) {
+    } catch {
       toast.error('Erro ao salvar o talhão. Tente novamente.');
     }
   }
@@ -136,27 +268,26 @@ export default function NewFieldPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Desenhar Novo Talhão</h1>
+        <h1 className={styles.title}>Demarcação de Talhão · Imagem de Satélite</h1>
         <p className={styles.subtitle}>
-          Delimite a área do talhão diretamente sobre a imagem de satélite da
-          propriedade <strong>{property.name}</strong>. A área e o perímetro são
-          calculados automaticamente.
+          Delimite o talhão diretamente no mapa de satélite da propriedade{' '}
+          <strong>{property.name}</strong> ou importe um arquivo <strong>Shapefile (.zip)</strong>.
         </p>
       </div>
 
       <div className={styles.gridContainer}>
-        {/* Mapa interativo de satélite com desenho de talhão */}
+        {/* Mapa interativo de satélite com desenho ou exibição de shapefile */}
         <div style={{ flex: 1, minWidth: '320px' }}>
           <PropertyMap
             mode="draw-polygon"
             title={`Demarcação de Talhão · ${property.name}`}
-            subtitle="Clique no mapa de satélite para adicionar os vértices do perímetro do talhão."
+            subtitle="Vértices desenhados ou importados via Shapefile sobre a camada de satélite."
             initialCenter={initialCenter}
             polygon={property.coordinates as any}
             polygonColor="#22c55e"
             drawnVertices={drawnVertices}
             onDrawnVerticesChange={setDrawnVertices}
-            height="500px"
+            height="520px"
           />
         </div>
 
@@ -178,8 +309,6 @@ export default function NewFieldPage() {
                 />
               </div>
 
-              {/* O campo de Código foi removido (Gerado pelo Backend) */}
-
               <div className={styles.formGroup}>
                 <Label className={styles.label}>Tipo de solo</Label>
                 <Select value={soilType} onValueChange={setSoilType}>
@@ -195,19 +324,59 @@ export default function NewFieldPage() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Seção de Importação de Shapefile */}
+              <div className={styles.importBox}>
+                <p className={styles.importTitle}>
+                  <FileUp size={14} style={{ color: 'var(--primary)' }} />
+                  Importar Shapefile / GeoJSON
+                </p>
+                <p className={styles.importDesc}>
+                  Carregue um arquivo .zip contendo o shapefile (.shp, .dbf, .shx) ou arquivo .geojson.
+                </p>
+
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept=".zip,.geojson,.json"
+                  style={{ display: 'none' }}
+                  onChange={handleFileImport}
+                />
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isImporting}
+                  style={{ width: '100%' }}
+                >
+                  {isImporting ? (
+                    <>
+                      <Loader2 className="animate-spin" size={14} style={{ marginRight: '6px' }} />
+                      Processando Geometria...
+                    </>
+                  ) : (
+                    <>
+                      <DownloadCloud size={14} style={{ marginRight: '6px' }} />
+                      Selecionar Arquivo Shapefile (.zip)
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Medidas (Estimadas) */}
+          {/* Medidas Calculadas */}
           <div className={styles.formCard}>
-            <p className={styles.label}>Medidas (Estimativa)</p>
+            <p className={styles.label}>Medidas Georreferenciadas</p>
             <div className={styles.measuresGrid}>
               <div className={styles.measureBox}>
                 <Ruler
                   size={16}
                   style={{ margin: '0 auto', color: 'var(--primary)' }}
                 />
-                <p className={styles.measureLabel}>Área</p>
+                <p className={styles.measureLabel}>Área Útil</p>
                 <p className={styles.measureValue}>{estimatedArea}</p>
               </div>
               <div className={styles.measureBox}>
@@ -215,7 +384,7 @@ export default function NewFieldPage() {
                   size={16}
                   style={{ margin: '0 auto', color: 'var(--primary)' }}
                 />
-                <p className={styles.measureLabel}>Perímetro</p>
+                <p className={styles.measureLabel}>Vértices</p>
                 <p className={styles.measureValue}>{estimatedPerimeter}</p>
               </div>
             </div>
@@ -230,35 +399,37 @@ export default function NewFieldPage() {
                 }}
               />
               {drawnVertices.length >= 3
-                ? 'Polígono demarcado. Revise os dados e salve o talhão. O backend irá calcular a área e perímetro oficiais.'
-                : 'Clique no mapa para marcar pelo menos 3 vértices delimitando o talhão.'}
+                ? 'Polígono demarcado na camada de satélite. Revise os dados e confirme a gravação do talhão.'
+                : 'Importe um Shapefile ou clique no mapa para demarcar os vértices do talhão.'}
             </p>
           </div>
 
           <div className={styles.actions}>
             <Button
               variant="outline"
+              type="button"
               className={styles.btnFlex}
-              asChild
-              disabled={isPending}
+              onClick={() => navigate(`/properties/${id}`)}
             >
-              <Link to={`/properties/${id}`}>Cancelar</Link>
+              Cancelar
             </Button>
             <Button
+              type="button"
               className={styles.btnFlex}
-              disabled={drawnVertices.length < 3 || isPending}
+              disabled={isPending || drawnVertices.length < 3}
               onClick={handleSaveField}
             >
               {isPending ? (
-                <Loader2
-                  size={16}
-                  className="animate-spin"
-                  style={{ marginRight: '8px' }}
-                />
+                <>
+                  <Loader2 className="animate-spin" size={16} />
+                  Salvando...
+                </>
               ) : (
-                <Check size={16} style={{ marginRight: '8px' }} />
+                <>
+                  <Check size={16} style={{ marginRight: '4px' }} />
+                  Salvar Talhão
+                </>
               )}
-              {isPending ? 'Salvando...' : 'Salvar Talhão'}
             </Button>
           </div>
         </div>

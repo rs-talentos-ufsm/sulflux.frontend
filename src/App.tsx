@@ -5,10 +5,6 @@ import './App.css';
 import { AuthEnums } from '@lib/shared';
 import { useEffect } from 'react';
 
-// Analytics
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
-
 import NotFoundPage from './pages/not-found/NotFound';
 import AuthPage from './pages/auth/Auth';
 import HealthPage from './pages/health/Health';
@@ -119,9 +115,6 @@ function App() {
           <Route path="*" element={<Navigate to="/not-found" replace />} />
         </Route>
       </Routes>
-
-      <SpeedInsights />
-      <Analytics />
     </>
   );
 }
