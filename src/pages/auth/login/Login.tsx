@@ -94,9 +94,13 @@ export default function LoginPage({ onNavigateToRegister }: LoginProps) {
           {isPending ? 'Entrando' : 'Entrar'}
         </button>
         {isError && (
-          <p style={{ color: 'red', marginTop: '0.5rem', fontSize: '0.875rem' }}>
-            {/* @ts-ignore */}
-            {error?.response?.data?.detail || error?.response?.data?.title || error?.response?.data?.error || 'Credenciais inválidas ou erro no servidor.'}
+          <p
+            style={{ color: 'red', marginTop: '0.5rem', fontSize: '0.875rem' }}
+          >
+            {(error as any)?.response?.data?.detail ||
+              (error as any)?.response?.data?.title ||
+              (error as any)?.response?.data?.error ||
+              'Credenciais inválidas ou erro no servidor.'}
           </p>
         )}
         {/* <div className={styles.divider}>
