@@ -396,8 +396,14 @@ export default function SeasonConfigPage() {
               <h2 className={styles.sectionTitle} style={{ marginBottom: 4 }}>
                 Cronograma de Safras & Aplicações
               </h2>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)' }}>
-                A data de início ajusta a sequência temporal. Sobreposição de safras é permitida.
+              <span
+                style={{
+                  fontSize: '0.8125rem',
+                  color: 'var(--muted-foreground)',
+                }}
+              >
+                A data de início ajusta a sequência temporal. Sobreposição de
+                safras é permitida.
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -415,7 +421,8 @@ export default function SeasonConfigPage() {
             <div className={styles.overlapBanner}>
               <Layers size={16} />
               <span>
-                Sobreposição temporal ativa: períodos concomitantes permitidos entre as fases.
+                Sobreposição temporal ativa: períodos concomitantes permitidos
+                entre as fases.
               </span>
             </div>
           )}
@@ -423,7 +430,8 @@ export default function SeasonConfigPage() {
           <div className={styles.timeline}>
             {sortedPhases.map((phase, index) => {
               const isLast = index === sortedPhases.length - 1;
-              const PhaseIcon = phase.tipo === CycleType.Commercial ? Sun : Leaf;
+              const PhaseIcon =
+                phase.tipo === CycleType.Commercial ? Sun : Leaf;
               const nodeClass =
                 phase.tipo === CycleType.Commercial
                   ? styles.nodeAmber
@@ -431,7 +439,9 @@ export default function SeasonConfigPage() {
 
               return (
                 <div key={phase.id} className={styles.phaseWrapper}>
-                  {!isLast && <span aria-hidden className={styles.timelineLine} />}
+                  {!isLast && (
+                    <span aria-hidden className={styles.timelineLine} />
+                  )}
 
                   <span className={`${styles.timelineNode} ${nodeClass}`}>
                     <PhaseIcon size={20} />
@@ -441,13 +451,21 @@ export default function SeasonConfigPage() {
                     <div className={styles.phaseCard}>
                       <CollapsibleTrigger className={styles.phaseTrigger}>
                         <div>
-                          <p className={styles.phaseIndex}>Sequência {index + 1}</p>
+                          <p className={styles.phaseIndex}>
+                            Sequência {index + 1}
+                          </p>
                           <h3 className={styles.phaseTitle}>{phase.titulo}</h3>
                           <p className={styles.phaseSubtitle}>
                             Início: {phase.inicio} · Término: {phase.fim}
                           </p>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                          }}
+                        >
                           <Button
                             type="button"
                             variant="ghost"
@@ -472,7 +490,11 @@ export default function SeasonConfigPage() {
                               <Input
                                 value={phase.titulo}
                                 onChange={(e) =>
-                                  updatePhaseField(phase.id, 'titulo', e.target.value)
+                                  updatePhaseField(
+                                    phase.id,
+                                    'titulo',
+                                    e.target.value,
+                                  )
                                 }
                               />
                             </Field>
@@ -506,7 +528,11 @@ export default function SeasonConfigPage() {
                                 value={phase.cultura}
                                 placeholder="Ex: Soja, Milho, Aveia..."
                                 onChange={(e) =>
-                                  updatePhaseField(phase.id, 'cultura', e.target.value)
+                                  updatePhaseField(
+                                    phase.id,
+                                    'cultura',
+                                    e.target.value,
+                                  )
                                 }
                               />
                             </Field>
@@ -528,7 +554,10 @@ export default function SeasonConfigPage() {
                             {/* Data de Início: Ajusta a sequência da safra */}
                             <Field label="Data de Início (Ajusta a Sequência)">
                               <div className={styles.inputIconWrapper}>
-                                <CalendarDays size={16} className={styles.inputIcon} />
+                                <CalendarDays
+                                  size={16}
+                                  className={styles.inputIcon}
+                                />
                                 <Input
                                   type="date"
                                   className={styles.inputWithIcon}
@@ -547,13 +576,20 @@ export default function SeasonConfigPage() {
                             {/* Data de Término */}
                             <Field label="Data de Término">
                               <div className={styles.inputIconWrapper}>
-                                <CalendarDays size={16} className={styles.inputIcon} />
+                                <CalendarDays
+                                  size={16}
+                                  className={styles.inputIcon}
+                                />
                                 <Input
                                   type="date"
                                   className={styles.inputWithIcon}
                                   value={phase.fim}
                                   onChange={(e) =>
-                                    updatePhaseField(phase.id, 'fim', e.target.value)
+                                    updatePhaseField(
+                                      phase.id,
+                                      'fim',
+                                      e.target.value,
+                                    )
                                   }
                                 />
                               </div>
@@ -572,14 +608,18 @@ export default function SeasonConfigPage() {
                                 size="sm"
                                 onClick={() => addApplication(phase.id)}
                               >
-                                <Plus size={14} style={{ marginRight: '4px' }} />
+                                <Plus
+                                  size={14}
+                                  style={{ marginRight: '4px' }}
+                                />
                                 Nova Aplicação
                               </Button>
                             </div>
 
                             {phase.inputs.length === 0 ? (
                               <p className={styles.emptyApplications}>
-                                Nenhuma aplicação registrada nesta fase. Clique em "Nova Aplicação".
+                                Nenhuma aplicação registrada nesta fase. Clique
+                                em &quot;Nova Aplicação&quot;.
                               </p>
                             ) : (
                               phase.inputs.map((app) => (
@@ -621,25 +661,39 @@ export default function SeasonConfigPage() {
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        <SelectItem value={ApplicationCategory.Fertilizer}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Fertilizer}
+                                        >
                                           Fertilizante
                                         </SelectItem>
-                                        <SelectItem value={ApplicationCategory.Defensive}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Defensive}
+                                        >
                                           Defensivo
                                         </SelectItem>
-                                        <SelectItem value={ApplicationCategory.Seed}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Seed}
+                                        >
                                           Semente
                                         </SelectItem>
-                                        <SelectItem value={ApplicationCategory.Inoculant}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Inoculant}
+                                        >
                                           Inoculante
                                         </SelectItem>
-                                        <SelectItem value={ApplicationCategory.Corrective}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Corrective}
+                                        >
                                           Corretivo / Calcário
                                         </SelectItem>
-                                        <SelectItem value={ApplicationCategory.Biological}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Biological}
+                                        >
                                           Biológico
                                         </SelectItem>
-                                        <SelectItem value={ApplicationCategory.Other}>
+                                        <SelectItem
+                                          value={ApplicationCategory.Other}
+                                        >
                                           Outro
                                         </SelectItem>
                                       </SelectContent>
@@ -647,7 +701,9 @@ export default function SeasonConfigPage() {
                                   </div>
 
                                   <div>
-                                    <label className={styles.fieldLabel}>Dia</label>
+                                    <label className={styles.fieldLabel}>
+                                      Dia
+                                    </label>
                                     <Input
                                       type="date"
                                       value={
@@ -705,7 +761,9 @@ export default function SeasonConfigPage() {
                                         <SelectValue />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        <SelectItem value={ApplicationUnit.KgHa}>
+                                        <SelectItem
+                                          value={ApplicationUnit.KgHa}
+                                        >
                                           kg/ha
                                         </SelectItem>
                                         <SelectItem value={ApplicationUnit.LHa}>
@@ -714,16 +772,24 @@ export default function SeasonConfigPage() {
                                         <SelectItem value={ApplicationUnit.GHa}>
                                           g/ha
                                         </SelectItem>
-                                        <SelectItem value={ApplicationUnit.DoseHa}>
+                                        <SelectItem
+                                          value={ApplicationUnit.DoseHa}
+                                        >
                                           dose/ha
                                         </SelectItem>
-                                        <SelectItem value={ApplicationUnit.TonHa}>
+                                        <SelectItem
+                                          value={ApplicationUnit.TonHa}
+                                        >
                                           ton/ha
                                         </SelectItem>
-                                        <SelectItem value={ApplicationUnit.ScHa}>
+                                        <SelectItem
+                                          value={ApplicationUnit.ScHa}
+                                        >
                                           sc/ha
                                         </SelectItem>
-                                        <SelectItem value={ApplicationUnit.MlHa}>
+                                        <SelectItem
+                                          value={ApplicationUnit.MlHa}
+                                        >
                                           ml/ha
                                         </SelectItem>
                                       </SelectContent>

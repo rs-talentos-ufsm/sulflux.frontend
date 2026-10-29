@@ -268,10 +268,13 @@ export default function NewFieldPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Demarcação de Talhão · Imagem de Satélite</h1>
+        <h1 className={styles.title}>
+          Demarcação de Talhão · Imagem de Satélite
+        </h1>
         <p className={styles.subtitle}>
           Delimite o talhão diretamente no mapa de satélite da propriedade{' '}
-          <strong>{property.name}</strong> ou importe um arquivo <strong>Shapefile (.zip)</strong>.
+          <strong>{property.name}</strong> ou importe um arquivo{' '}
+          <strong>Shapefile (.zip)</strong>.
         </p>
       </div>
 
@@ -332,7 +335,8 @@ export default function NewFieldPage() {
                   Importar Shapefile / GeoJSON
                 </p>
                 <p className={styles.importDesc}>
-                  Carregue um arquivo .zip contendo o shapefile (.shp, .dbf, .shx) ou arquivo .geojson.
+                  Carregue um arquivo .zip contendo o shapefile (.shp, .dbf,
+                  .shx) ou arquivo .geojson.
                 </p>
 
                 <input
@@ -353,7 +357,11 @@ export default function NewFieldPage() {
                 >
                   {isImporting ? (
                     <>
-                      <Loader2 className="animate-spin" size={14} style={{ marginRight: '6px' }} />
+                      <Loader2
+                        className="animate-spin"
+                        size={14}
+                        style={{ marginRight: '6px' }}
+                      />
                       Processando Geometria...
                     </>
                   ) : (
