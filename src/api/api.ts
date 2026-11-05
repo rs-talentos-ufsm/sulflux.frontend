@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getBaseUrl = () => {
+const getApiUrl = () => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (
     typeof window !== 'undefined' &&
@@ -12,22 +12,22 @@ const getBaseUrl = () => {
       !envUrl.includes('localhost') &&
       !envUrl.includes('127.0.0.1')
     ) {
-      return envUrl.endsWith('/api')
-        ? envUrl
-        : `${envUrl.replace(/\/+$/, '')}/api`;
+      return envUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
     }
-    return 'https://api-sulflux.dorneles.dev/api';
+    return 'https://api-sulflux.dorneles.dev';
   }
-  const fallback =
-    envUrl ||
-    `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 5001}/api`;
-  return fallback.endsWith('/api')
-    ? fallback
-    : `${fallback.replace(/\/+$/, '')}/api`;
+  return (
+    envUrl || `http://localhost:${import.meta.env.VITE_BACKEND_PORT || 5001}`
+  )
+    .replace(/\/api\/?$/, '')
+    .replace(/\/+$/, '');
 };
 
+export const normalizedApiUrl = getApiUrl();
+export const DORNELES_LOGIN_URL = `${normalizedApiUrl}/api/auth/dorneles/login`;
+
 const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: normalizedApiUrl,
   withCredentials: true,
 });
 
@@ -58,11 +58,21 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Verifica se é erro 401 e se a rota não é a própria rota de refresh (evita loop)
+    // Rotas de autenticação que NUNCA devem disparar renovação automática (refresh token)
+    const isAuthBypassUrl =
+      typeof originalRequest.url === 'string' &&
+      (originalRequest.url.includes('/auth/login') ||
+        originalRequest.url.includes('/auth/register') ||
+        originalRequest.url.includes('/auth/logout') ||
+        originalRequest.url.includes('/auth/refresh') ||
+        originalRequest.url.includes('/auth/dorneles/callback') ||
+        originalRequest.url.includes('/callback'));
+
+    // Verifica se é erro 401, se não é uma rota de autenticação e se não foi retentada
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      originalRequest.url !== '/api/auth/refresh'
+      !isAuthBypassUrl
     ) {
       if (isRefreshing) {
         // Coloca na fila se já estiver renovando
@@ -84,7 +94,7 @@ api.interceptors.response.use(
       try {
         // Tenta renovar o token. O navegador envia o Refresh Token (Cookie) automaticamente.
         await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
+          `${normalizedApiUrl}/api/auth/refresh`,
           {},
           { withCredentials: true },
         );
