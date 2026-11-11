@@ -127,16 +127,88 @@
 .bubbleAssistant {
   background-color: var(--muted);
   color: var(--foreground);
-  padding: 1rem 1.25rem;
+  padding: 1.125rem 1.375rem;
   border-radius: 1rem 1rem 1rem 0.25rem;
   max-width: 85%;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  word-break: break-word;
+}
+
+.formattedBody {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  white-space: pre-wrap;
-  word-break: break-word;
+}
+
+.paragraph {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.boldText {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.italicText {
+  font-style: italic;
+}
+
+.inlineCode {
+  background-color: rgba(0, 0, 0, 0.08);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85em;
+}
+
+.bulletList {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  list-style-type: disc;
+}
+
+.bulletList li {
+  line-height: 1.55;
+}
+
+.numberedList {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  list-style-type: decimal;
+}
+
+.numberedList li {
+  line-height: 1.55;
+}
+
+.mixedBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.55;
+  margin-left: 0.25rem;
+}
+
+.bulletDot {
+  color: var(--primary);
+  font-weight: bold;
 }
 
 .citationsList {

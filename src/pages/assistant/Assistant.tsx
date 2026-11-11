@@ -18,10 +18,153 @@ interface Message {
   citations?: Array<{ label: string; category: string }>;
 }
 
+/**
+ * Processa marcações inline como **negrito**, *itálico* e `código`
+ */
+function parseInline(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  const regex = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const token = match[0];
+    if (token.startsWith('**') && token.endsWith('**')) {
+      parts.push(
+        <strong key={match.index} className={styles.boldText}>
+          {token.slice(2, -2)}
+        </strong>,
+      );
+    } else if (token.startsWith('*') && token.endsWith('*')) {
+      parts.push(
+        <em key={match.index} className={styles.italicText}>
+          {token.slice(1, -1)}
+        </em>,
+      );
+    } else if (token.startsWith('`') && token.endsWith('`')) {
+      parts.push(
+        <code key={match.index} className={styles.inlineCode}>
+          {token.slice(1, -1)}
+        </code>,
+      );
+    }
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : [text];
+}
+
+/**
+ * Renderiza o corpo da mensagem com suporte a parágrafos, listas e formatação
+ */
+function FormattedMessage({ content }: { content: string }) {
+  if (!content) return null;
+
+  const normalized = content.replace(/\r\n/g, '\n');
+
+  // Caso o texto não contenha quebras de linha mas seja um texto denso com várias frases,
+  // dividimos inteligentemente por frases para não ficar em bloco único.
+  let rawBlocks = normalized
+    .split(/\n\s*\n/)
+    .filter((b) => b.trim().length > 0);
+
+  if (
+    rawBlocks.length === 1 &&
+    !normalized.includes('\n') &&
+    normalized.length > 180
+  ) {
+    const sentences = normalized
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9À-Ú*])/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (sentences.length >= 3) {
+      // Agrupa a 1ª frase como introdução, as do meio como análise e a última como conclusão
+      const intro = sentences[0];
+      const middle = sentences.slice(1, -1).join(' ');
+      const conclusion = sentences[sentences.length - 1];
+      rawBlocks = [intro, middle, conclusion];
+    }
+  }
+
+  return (
+    <div className={styles.formattedBody}>
+      {rawBlocks.map((block, bIdx) => {
+        const lines = block
+          .split('\n')
+          .map((l) => l.trim())
+          .filter((l) => l.length > 0);
+
+        if (lines.length === 0) return null;
+
+        const isBulletList = lines.every((line) => /^[-*•]\s+/.test(line));
+        if (isBulletList) {
+          return (
+            <ul key={bIdx} className={styles.bulletList}>
+              {lines.map((line, lIdx) => (
+                <li key={lIdx}>{parseInline(line.replace(/^[-*•]\s+/, ''))}</li>
+              ))}
+            </ul>
+          );
+        }
+
+        const isNumberedList = lines.every((line) => /^\d+[.)]\s+/.test(line));
+        if (isNumberedList) {
+          return (
+            <ol key={bIdx} className={styles.numberedList}>
+              {lines.map((line, lIdx) => (
+                <li key={lIdx}>
+                  {parseInline(line.replace(/^\d+[.)]\s+/, ''))}
+                </li>
+              ))}
+            </ol>
+          );
+        }
+
+        const hasBullets = lines.some((l) => /^[-*•]\s+/.test(l));
+        if (hasBullets) {
+          return (
+            <div key={bIdx} className={styles.mixedBlock}>
+              {lines.map((line, lIdx) => {
+                if (/^[-*•]\s+/.test(line)) {
+                  return (
+                    <div key={lIdx} className={styles.bulletItem}>
+                      <span className={styles.bulletDot}>•</span>
+                      <span>{parseInline(line.replace(/^[-*•]\s+/, ''))}</span>
+                    </div>
+                  );
+                }
+                return (
+                  <p key={lIdx} className={styles.paragraph}>
+                    {parseInline(line)}
+                  </p>
+                );
+              })}
+            </div>
+          );
+        }
+
+        return (
+          <p key={bIdx} className={styles.paragraph}>
+            {parseInline(block)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 const DEFAULT_WELCOME_MESSAGE: Message = {
   id: 'welcome',
   role: 'assistant',
-  text: 'Olá! Sou o Assistente Sulflux. Conheço os fluxos de carbono medidos por Eddy Covariance, a umidade do solo e os laudos de satélite das suas fazendas. Como posso ajudar você hoje?',
+  text: 'Olá! Sou o **Assistente Sulflux**, seu copiloto de gestão agroambiental.\n\nAcompanho em tempo real os fluxos de carbono (**Eddy Covariance**), a dinâmica hídrica e os laudos de satélite (**Sentinel-2A**) das suas propriedades.\n\nComo posso ajudar nas suas decisões agronômicas hoje?',
   citations: [
     { label: 'Eddy Covariance Ativo', category: 'carbono' },
     { label: 'Sentinel-2A 10m', category: 'satelite' },
@@ -180,7 +323,7 @@ export default function AssistantPage() {
                       <Bot size={16} />
                     </div>
                     <div className={styles.bubbleAssistant}>
-                      <div>{msg.text}</div>
+                      <FormattedMessage content={msg.text} />
                       {msg.citations && msg.citations.length > 0 && (
                         <div className={styles.citationsList}>
                           {msg.citations.map((c, idx) => (
